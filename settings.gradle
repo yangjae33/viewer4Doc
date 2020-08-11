@@ -1,0 +1,2 @@
+rootProject.name = 'viewer4doc'
+include 'viewer4doc-api'
