@@ -1,13 +1,24 @@
 package com.yangql.viewer4doc.domain;
 
-public class File {
+import lombok.*;
 
-    private Long id;
-    private String size;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class File{
+    @Id
+    @Setter
+    @GeneratedValue
+    private long id;
+
     private String org_name;
     private String name;
     private String link;
-    private String callurl;
-    private String returnurl;
 
 }
