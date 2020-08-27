@@ -1,2 +1,8 @@
 rootProject.name = 'viewer4doc'
-include 'viewer4doc-api'
+
+include 'viewer4doc-admin-api'
+include 'viewer4doc-common'
+include 'viewer4doc-user-api'
+include 'viewer4doc-mvc'
+include 'viewer4doc-login-api'
+
