@@ -2,19 +2,19 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileRepository;
+import com.yangql.viewer4doc.interfaces.FileController;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-
+import static org.mockito.Mockito.verify;
 
 class UploadFileServiceTest {
 
@@ -26,33 +26,23 @@ class UploadFileServiceTest {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        mockReturnRepository();
         uploadFileService = new UploadFileService(fileRepository);
     }
+    @Test
+    public void upload() throws Exception {
+        String fileName = "test.txt";
+        File file = new File(FileController.UPLOAD_DIR+fileName);
+        file.delete();
 
-    private void mockReturnRepository() {
-        List<FileInfo> fileInfos = new ArrayList<>();
-        FileInfo fileInfo = FileInfo.builder()
-                .id(1L)
-                .org_name("org.pdf")
-                .name("new.pdf")
-                .build();
-        fileInfos.add(fileInfo);
-        given(fileRepository.findAll()).willReturn(fileInfos);
-        given(fileRepository.findById(1L)).willReturn(Optional.of(fileInfo));
-    }
-    @Test
-    public void addFile(){
-        FileInfo fileInfo = FileInfo.builder()
-                .id(1L)
-                .org_name("org.pdf")
-                .name("new.pdf")
-                .build();
-    }
-    @Test
-    public void getFiles(){
-        List<FileInfo> fileInfos = uploadFileService.getFiles();
-        FileInfo fileInfo = fileInfos.get(0);
-        assertThat(fileInfo.getId(),is(1L));
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
+                "text/plain", "test data".getBytes());
+
+        FileInfo newFile = uploadFileService.uploadFile(mockMultipartFile);
+
+        given(fileRepository.save(newFile)).willReturn(newFile);
+
+        verify(fileRepository).save(any());
+
+        Assertions.assertTrue(file.exists());
     }
 }

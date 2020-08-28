@@ -22,7 +22,4 @@ public class FileInfo {
     private String name;
 
     private String link;
-
-
-
 }
