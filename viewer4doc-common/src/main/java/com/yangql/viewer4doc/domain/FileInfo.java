@@ -11,14 +11,15 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class File{
+public class FileInfo {
     @Id
     @Setter
     @GeneratedValue
     private Long id;
 
     private String org_name;
-    private String name;
-    private String link;
 
+    private String name;
+
+    private String link;
 }

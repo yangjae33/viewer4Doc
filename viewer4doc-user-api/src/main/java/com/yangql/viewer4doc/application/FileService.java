@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.File;
+import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +12,18 @@ public class FileService {
     public FileService(FileRepository fileRepository){
         this.fileRepository = fileRepository;
     }
-    public void addFile(File file){
-        fileRepository.save(file);
+    public void addFile(FileInfo fileInfo){
+        fileRepository.save(fileInfo);
     }
 
-    public List<File> getFiles() {
-        List<File> files = fileRepository.findAll();
-        return files;
+    public List<FileInfo> getFiles() {
+        List<FileInfo> fileInfos = fileRepository.findAll();
+        return fileInfos;
     }
 
 
-    public File getFile(Long id) {
-        File file = fileRepository.findById(id).orElse(null);
-        return file;
+    public FileInfo getFile(Long id) {
+        FileInfo fileInfo = fileRepository.findById(id).orElse(null);
+        return fileInfo;
     }
 }
