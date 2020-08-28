@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.File;
+import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,11 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+
 import static org.mockito.BDDMockito.given;
 
 
-class FileServiceTest {
+class FileInfoServiceTest {
 
     private FileService fileService;
 
@@ -31,19 +32,19 @@ class FileServiceTest {
     }
 
     private void mockReturnRepository() {
-        List<File> files = new ArrayList<>();
-        File file = File.builder()
+        List<FileInfo> fileInfos = new ArrayList<>();
+        FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
                 .org_name("org.pdf")
                 .name("new.pdf")
                 .build();
-        files.add(file);
-        given(fileRepository.findAll()).willReturn(files);
-        given(fileRepository.findById(1L)).willReturn(Optional.of(file));
+        fileInfos.add(fileInfo);
+        given(fileRepository.findAll()).willReturn(fileInfos);
+        given(fileRepository.findById(1L)).willReturn(Optional.of(fileInfo));
     }
     @Test
     public void addFile(){
-        File file = File.builder()
+        FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
                 .org_name("org.pdf")
                 .name("new.pdf")
@@ -51,8 +52,8 @@ class FileServiceTest {
     }
     @Test
     public void getFiles(){
-        List<File> files = fileService.getFiles();
-        File file = files.get(0);
-        assertThat(file.getId(),is(1L));
+        List<FileInfo> fileInfos = fileService.getFiles();
+        FileInfo fileInfo = fileInfos.get(0);
+        assertThat(fileInfo.getId(),is(1L));
     }
 }

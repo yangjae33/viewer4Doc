@@ -5,8 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface FileRepository extends CrudRepository<File,Long> {
-    List<File> findAll();
-    Optional<File> findById(Long id);
-    File save(File file);
+public interface FileRepository extends CrudRepository<FileInfo,Long> {
+    List<FileInfo> findAll();
+    Optional<FileInfo> findById(Long id);
+    FileInfo save(FileInfo fileInfo);
 }

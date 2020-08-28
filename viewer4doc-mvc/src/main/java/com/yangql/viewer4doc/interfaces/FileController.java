@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.domain.TestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,8 @@ public class FileController {
     public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
 
     @Autowired
-    private FileService fileService;
+    private UploadFileService uploadFileService;
+
     @GetMapping("/")
     public String homepage(){
         return "index";

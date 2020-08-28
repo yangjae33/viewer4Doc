@@ -1,7 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.FileService;
-import com.yangql.viewer4doc.domain.File;
+import com.yangql.viewer4doc.domain.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +15,13 @@ public class FileController {
     FileService fileService;
 
     @GetMapping("/files")
-    public List<File> list(){
-        List<File> files = fileService.getFiles();
-        return files;
+    public List<FileInfo> list(){
+        List<FileInfo> fileInfos = fileService.getFiles();
+        return fileInfos;
     }
     @GetMapping("/file/{id}")
-    public File detail(@PathVariable("id") Long id){
-        File file = fileService.getFile(id);
-        return file;
+    public FileInfo detail(@PathVariable("id") Long id){
+        FileInfo fileInfo = fileService.getFile(id);
+        return fileInfo;
     }
 }

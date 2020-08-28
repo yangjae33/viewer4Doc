@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FileService {
+public class UploadFileService {
     private static FileRepository fileRepository;
-    public FileService(FileRepository fileRepository){
+    public UploadFileService(FileRepository fileRepository){
         this.fileRepository = fileRepository;
     }
     public void addFile(FileInfo fileInfo){
