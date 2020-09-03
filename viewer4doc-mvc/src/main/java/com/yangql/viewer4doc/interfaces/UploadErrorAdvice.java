@@ -1,6 +1,5 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadWithInvalidExtensionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

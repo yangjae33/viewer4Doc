@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.UploadFileNotExistException;
+import com.yangql.viewer4doc.application.ConvertFileService;
 import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.application.UploadWithInvalidExtensionException;
 import com.yangql.viewer4doc.domain.FileInfo;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -20,9 +19,10 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.File;
+import java.io.*;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.longThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +40,9 @@ class FileControllerTest {
 
     @MockBean
     private UploadFileService uploadFileService;
+
+    @MockBean
+    private ConvertFileService convertFileService;
 
     @BeforeEach
     public void setUp(){
@@ -91,21 +94,44 @@ class FileControllerTest {
     }
     @Test
     public void uploadWithNotExistFileAPI() throws Exception {
-        String fileName = null;
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
-                "text/plain", "".getBytes());
+        MockMultipartFile mockMultipartFile = null;
 
         given(uploadFileService.uploadFile(mockMultipartFile))
                 .willThrow(UploadFileNotExistException.class);
-
     }
-    @Test
-    public void uploadWithInvalidExtensionAPI() throws Exception {
-        String fileName = "test.exe";
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
-                "text/plain", "test".getBytes());
 
-        given(uploadFileService.uploadFile(mockMultipartFile))
-                .willThrow(UploadWithInvalidExtensionException.class);
+    @Test
+    public void convert() throws IOException {
+        Long fileId = 1L;
+        convertFileService.convertFile(fileId);
+
+        Runtime rt = Runtime.getRuntime();
+        Process p;
+        String baseURL = "/Users/mac/Desktop/";
+        String TempFileName = "test";
+        String fileName = "test.docx";
+        String cmd = "python2 " + baseURL + "unoconv/unoconv.py -i utf8 -f pdf --output=" + baseURL + "converts/"
+                + TempFileName + ".pdf " + baseURL + "uploads/" + fileName;
+        p = rt.exec(cmd);
+
+        InputStream in = p.getInputStream();
+        InputStreamReader isr = new InputStreamReader(in);
+        BufferedReader is = null;
+        BufferedReader es = null;
+        es = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        is = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while ((line = is.readLine()) != null) {
+            System.out.println(line);
+        }
+        while ((line = es.readLine()) != null) {
+            System.out.println(line);
+        }
+        if (is != null)
+            is.close();
+        if (es != null)
+            es.close();
+
+
     }
 }

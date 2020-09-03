@@ -41,7 +41,6 @@ public class FileController {
     public String uploadFile(
             @RequestParam("file") MultipartFile file, RedirectAttributes attributes
     ) throws IOException {
-
         if(file.isEmpty()){
             attributes.addFlashAttribute("message","no file to upload");
             return "redirect:/";
@@ -62,13 +61,36 @@ public class FileController {
     public ResponseEntity<?> uploadFileWithResponseJson(
             @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
+        if(file.isEmpty()){
+            throw new UploadFileNotExistException();
+        }
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
         String url = "/api/upload";
 
         FileInfo newfile = uploadFileService.uploadFile(file);
 
         return ResponseEntity.created(new URI(url)).body(newfile);
     }
+    @PostMapping("/api/convert")
+    public ResponseEntity<?> convertFile(
+            @RequestParam("fileId") String fileId
+    ){
+        return null;
+    }
+    @PostMapping("/api/upload-to-pdf")
+    public ResponseEntity<?> uploadToPDF(
+            @RequestParam(value = "file",required = false) MultipartFile file
+    ) throws IOException, URISyntaxException {
+        if(file.isEmpty()){
+            throw new UploadFileNotExistException();
+        }
+        String url = "/api/upload-to-pdf";
 
+        FileInfo newFile = uploadFileService.uploadFileToPDF(file);
+
+        return ResponseEntity.created(new URI(url)).body(newFile);
+    }
     @GetMapping("/thymeleaf")
     public String thymeleafTest2(Model model){
         TestVo testModel = new TestVo("jaehyuk","yang");

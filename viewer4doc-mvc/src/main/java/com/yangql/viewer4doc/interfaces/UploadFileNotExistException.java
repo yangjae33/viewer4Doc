@@ -1,4 +1,4 @@
-package com.yangql.viewer4doc.application;
+package com.yangql.viewer4doc.interfaces;
 
 public class UploadFileNotExistException extends RuntimeException{
     UploadFileNotExistException(){
