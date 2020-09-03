@@ -1,7 +1,7 @@
 package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileRepository;
+import com.yangql.viewer4doc.domain.FileInfoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,13 +22,13 @@ class FileInfoServiceTest {
     private FileService fileService;
 
     @Mock
-    private FileRepository fileRepository;
+    private FileInfoRepository fileInfoRepository;
 
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
-        fileService = new FileService(fileRepository);
+        fileService = new FileService(fileInfoRepository);
     }
 
     private void mockReturnRepository() {
@@ -39,8 +39,8 @@ class FileInfoServiceTest {
                 .name("new.pdf")
                 .build();
         fileInfos.add(fileInfo);
-        given(fileRepository.findAll()).willReturn(fileInfos);
-        given(fileRepository.findById(1L)).willReturn(Optional.of(fileInfo));
+        given(fileInfoRepository.findAll()).willReturn(fileInfos);
+        given(fileInfoRepository.findById(1L)).willReturn(Optional.of(fileInfo));
     }
     @Test
     public void addFile(){
