@@ -1,6 +1,8 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadFileService;
+import com.yangql.viewer4doc.application.UploadWithInvalidExtensionException;
 import com.yangql.viewer4doc.domain.FileInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -19,8 +22,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.File;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,5 +88,24 @@ class FileControllerTest {
                 .andExpect(status().isCreated());
 
         verify(uploadFileService).uploadFile(mockMultipartFile);
+    }
+    @Test
+    public void uploadWithNotExistFileAPI() throws Exception {
+        String fileName = null;
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
+                "text/plain", "".getBytes());
+
+        given(uploadFileService.uploadFile(mockMultipartFile))
+                .willThrow(UploadFileNotExistException.class);
+
+    }
+    @Test
+    public void uploadWithInvalidExtensionAPI() throws Exception {
+        String fileName = "test.exe";
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
+                "text/plain", "test".getBytes());
+
+        given(uploadFileService.uploadFile(mockMultipartFile))
+                .willThrow(UploadWithInvalidExtensionException.class);
     }
 }

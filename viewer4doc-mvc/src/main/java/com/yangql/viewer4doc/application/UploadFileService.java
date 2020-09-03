@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileRepository;
+import com.yangql.viewer4doc.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +31,20 @@ public class UploadFileService {
     public FileInfo uploadFile(MultipartFile file) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        int pos = fileName.lastIndexOf(".");
+        String ext = fileName.substring(pos+1);
+        System.out.println(ext);
+        if(file == null){
+            throw new UploadFileNotExistException();
+        }
+        if(
+                !(ext.equals("docx") ||
+                ext.equals("pdf") || ext.equals("xlsx") ||
+                ext.equals("hwp")|| ext.equals("pptx"))
+        ){
+            throw new UploadWithInvalidExtensionException(fileName);
+        }
 
         Path path = Paths.get(UPLOAD_DIR+fileName);
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
