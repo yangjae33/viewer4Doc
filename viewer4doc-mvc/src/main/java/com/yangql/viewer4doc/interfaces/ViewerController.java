@@ -8,6 +8,6 @@ public class ViewerController {
 
     @GetMapping("/viewer4doc")
     public String showViewer(){
-        return "index.html";
+        return "viewer2.html";
     }
 }
