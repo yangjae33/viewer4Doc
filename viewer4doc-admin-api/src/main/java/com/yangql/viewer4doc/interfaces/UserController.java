@@ -1,7 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.UserService;
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +18,24 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<User> list(){
-        List<User> users = userService.getUsers();
-        return users;
+    public List<UserInfo> list(){
+        List<UserInfo> userInfos = userService.getUsers();
+        return userInfos;
     }
     @PostMapping("/users")
-    public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException {
-        User user = User.builder()
+    public ResponseEntity<?> create(@RequestBody UserInfo resource) throws URISyntaxException {
+        UserInfo userInfo = UserInfo.builder()
                 .id(1L)
                 .name(resource.getName())
                 .email(resource.getEmail())
                 .build();
-        userService.addUser(user);
-        URI location = new URI("/users/"+user.getId());
+        userService.addUser(userInfo);
+        URI location = new URI("/users/"+ userInfo.getId());
         return ResponseEntity.created(location).body("{}");
     }
     @GetMapping("/users/{id}")
-    public User detail(@PathVariable("id") Long id){
-        User user = userService.getUser(id);
-        return user;
+    public UserInfo detail(@PathVariable("id") Long id){
+        UserInfo userInfo = userService.getUser(id);
+        return userInfo;
     }
 }

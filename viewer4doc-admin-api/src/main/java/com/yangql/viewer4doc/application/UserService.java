@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.domain.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +15,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers() {
-        List<User> users = userRepository.findAll();
+    public List<UserInfo> getUsers() {
+        List<UserInfo> userInfos = userRepository.findAll();
 
-        return users;
+        return userInfos;
     }
-    public void addUser(User user){
-        userRepository.save(user);
+    public void addUser(UserInfo userInfo){
+        userRepository.save(userInfo);
     }
-    public User getUser(Long id){
-        User user = userRepository.findById(id).orElse(null);
-        return user;
+    public UserInfo getUser(Long id){
+        UserInfo userInfo = userRepository.findById(id).orElse(null);
+        return userInfo;
     }
 }

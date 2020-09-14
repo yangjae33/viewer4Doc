@@ -2,7 +2,7 @@ package com.yangql.viewer4doc.interfaces;
 
 
 import com.yangql.viewer4doc.application.UserService;
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +29,12 @@ public class SessionController {
         String email = resource.getEmail();
         String password = resource.getPassword();
 
-        User user = userService.authenticate(email,password);
+        UserInfo userInfo = userService.authenticate(email,password);
 
         String accessToken = jwtUtil.createToken(
-                user.getId(),
-                user.getName(),
-                user.isPublisher() ? user.getFileId() : null);
+                userInfo.getId(),
+                userInfo.getName(),
+                userInfo.isPublisher() ? userInfo.getFileId() : null);
 
         String url = "/session";
         return ResponseEntity.created(new URI(url)).body(
