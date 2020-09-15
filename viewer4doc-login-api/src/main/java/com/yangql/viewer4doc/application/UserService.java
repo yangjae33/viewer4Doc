@@ -1,13 +1,12 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,15 +23,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public UserInfo authenticate(String email, String password) {
+        UserInfo userInfo = userRepository.findByEmail(email)
                 .orElseThrow(()->new EmailNotExistedException(email));
 
-        if(!passwordEncoder.matches(password,user.getPassword())){
+        if(!passwordEncoder.matches(password, userInfo.getPassword())){
             throw new PasswordWrongException();
         }
 
-        return user;
+        return userInfo;
     }
 
 }

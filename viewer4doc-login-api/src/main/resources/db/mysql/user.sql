@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS viewer4doc;
+
+ALTER DATABASE viewer4doc
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+
+GRANT ALL PRIVILEGES ON viewer4doc.* TO 'viewer4doc@%' IDENTIFIED BY 'viewer4doc';

@@ -2,7 +2,7 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.EmailExistedException;
 import com.yangql.viewer4doc.application.UserService;
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-class UserControllerTest {
+class UserInfoControllerTest {
     @Autowired
     MockMvc mvc;
 
@@ -28,7 +28,7 @@ class UserControllerTest {
 
     @Test
     public void create() throws Exception {
-        User mockUser = User.builder()
+        UserInfo mockUserInfo = UserInfo.builder()
                 .id(1004L)
                 .email("tester@example.com")
                 .name("Tester")
@@ -36,7 +36,7 @@ class UserControllerTest {
                 .build();
 
         given(userService.registerUser("tester@example.com","Tester","test"))
-                .willReturn(mockUser);
+                .willReturn(mockUserInfo);
 
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)

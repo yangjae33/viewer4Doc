@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +13,9 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
-class UserServiceTest {
+class UserInfoServiceTest {
 
 
     private UserService userService;
@@ -32,20 +31,20 @@ class UserServiceTest {
     }
 
     private void mockReturnRepository() {
-        List<User> users = new ArrayList<>();
-        User user = User.builder()
+        List<UserInfo> userInfos = new ArrayList<>();
+        UserInfo userInfo = UserInfo.builder()
                 .id(1L)
                 .name("jaehyuk")
                 .email("a@gmail.com")
                 .build();
-        users.add(user);
-        given(userRepository.findAll()).willReturn(users);
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        userInfos.add(userInfo);
+        given(userRepository.findAll()).willReturn(userInfos);
+        given(userRepository.findById(1L)).willReturn(Optional.of(userInfo));
     }
 
     @Test
     public void addUser(){
-        User user = User.builder()
+        UserInfo userInfo = UserInfo.builder()
                 .id(1L)
                 .name("jaehyuk")
                 .email("a@gmail.com")
@@ -53,14 +52,14 @@ class UserServiceTest {
     }
     @Test
     public void getUsers(){
-        List<User> users = userService.getUsers();
-        User user = users.get(0);
-        assertThat(user.getName(),is("jaehyuk"));
+        List<UserInfo> userInfos = userService.getUsers();
+        UserInfo userInfo = userInfos.get(0);
+        assertThat(userInfo.getName(),is("jaehyuk"));
     }
     @Test
     public void getUser(){
-        User user = userService.getUser(1L);
+        UserInfo userInfo = userService.getUser(1L);
 
-        assertThat(user.getId(),is(1L));
+        assertThat(userInfo.getId(),is(1L));
     }
 }

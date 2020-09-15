@@ -4,17 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
 
-class UserTest {
+class UserInfoTest {
 
     @Test
     public void creation(){
-        User user = User.builder()
+        UserInfo userInfo = UserInfo.builder()
                 .name("jaehyuk")
                 .email("a@gmail.com")
                 .build();
-        assertThat(user.getName(),is("jaehyuk"));
+        assertThat(userInfo.getName(),is("jaehyuk"));
     }
 
 }

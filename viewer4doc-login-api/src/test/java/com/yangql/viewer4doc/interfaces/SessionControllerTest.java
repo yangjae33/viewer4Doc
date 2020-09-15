@@ -3,7 +3,7 @@ package com.yangql.viewer4doc.interfaces;
 import com.yangql.viewer4doc.application.EmailNotExistedException;
 import com.yangql.viewer4doc.application.PasswordWrongException;
 import com.yangql.viewer4doc.application.UserService;
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -40,13 +39,13 @@ class SessionControllerTest {
         String email = "tester@example.com";
         String password = "test";
 
-        User mockUser = User.builder()
+        UserInfo mockUserInfo = UserInfo.builder()
                 .id(id)
                 .name(name)
                 .level(5L)
                 .build();
 
-        given(userService.authenticate(email,password)).willReturn(mockUser);
+        given(userService.authenticate(email,password)).willReturn(mockUserInfo);
 
         given(jwtUtil.createToken(id,name,null)).willReturn("header.payload.signiture");
 
@@ -66,14 +65,14 @@ class SessionControllerTest {
         String email = "tester@example.com";
         String password = "test";
 
-        User mockUser = User.builder()
+        UserInfo mockUserInfo = UserInfo.builder()
                 .id(id)
                 .name(name)
                 .level(50L)
                 .fileId(369L)
                 .build();
 
-        given(userService.authenticate(email,password)).willReturn(mockUser);
+        given(userService.authenticate(email,password)).willReturn(mockUserInfo);
 
         given(jwtUtil.createToken(id,name, 369L)).willReturn("header.payload.signature");
 

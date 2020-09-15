@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.domain.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +13,10 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-class UserServiceTest {
+class UserInfoServiceTest {
 
     private UserService userService;
 
@@ -37,16 +36,16 @@ class UserServiceTest {
     public void authenticateWithValidAttributes(){
         String email = "tester@example.com";
         String password = "test";
-        User mockUser = User.builder()
+        UserInfo mockUserInfo = UserInfo.builder()
                 .email(email)
                 .build();
 
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUser));
+        given(userRepository.findByEmail(email)).willReturn(Optional.of(mockUserInfo));
         given(passwordEncoder.matches(any(),any())).willReturn(true);
 
-        User user = userService.authenticate(email,password);
+        UserInfo userInfo = userService.authenticate(email,password);
 
-        assertThat(user.getEmail(), is(email));
+        assertThat(userInfo.getEmail(), is(email));
 
     }
 

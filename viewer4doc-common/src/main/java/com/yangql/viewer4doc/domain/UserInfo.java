@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserInfo {
     @Id
     @GeneratedValue
     private Long id;

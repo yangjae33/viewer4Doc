@@ -1,14 +1,13 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.UserService;
-import com.yangql.viewer4doc.domain.User;
+import com.yangql.viewer4doc.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -19,16 +18,16 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<?> create(
-            @RequestBody User resource
+            @RequestBody UserInfo resource
     ) throws URISyntaxException {
 
         String email = resource.getEmail();
         String name = resource.getName();
         String password = resource.getPassword();
 
-        User user = userService.registerUser(email,name,password);
+        UserInfo userInfo = userService.registerUser(email,name,password);
 
-        String url = "/api/users/"+user.getId();
+        String url = "/api/users/"+ userInfo.getId();
         return ResponseEntity.created(new URI(url)).body("{}");
 
     }

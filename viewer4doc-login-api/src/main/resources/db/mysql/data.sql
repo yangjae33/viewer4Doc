@@ -1,0 +1,1 @@
+INSERT IGNORE INTO userInfo VALUES (1, 'Jaehyuk', 'wogurrhtn@gmail.com', 'asdfasdf', 1, 'fileId');
