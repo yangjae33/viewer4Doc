@@ -3,7 +3,7 @@
 
 ## 프로젝트 소개
 
-<img src="img/newArchitecture.png" width="640px" height="480px">
+<img src="img/Architecture0916.png" width="640px" height="480px">
 
 ## 개발환경
 
