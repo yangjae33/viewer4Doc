@@ -15,11 +15,11 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class GCSController {
 
-    private final GCSService GCSService;
-
-    @PostMapping("gcs/upload")
-    public ResponseEntity localUploadToStorage(@RequestBody UploadReqDto uploadReqDto) throws IOException {
-        BlobInfo fileFromGCS = GCSService.uploadFileGCS(uploadReqDto);
-        return ResponseEntity.ok(fileFromGCS.toString());
-    }
+//    private final GCSService GCSService;
+//
+//    @PostMapping("gcs/upload")
+//    public ResponseEntity localUploadToStorage(@RequestBody UploadReqDto uploadReqDto) throws IOException {
+//        BlobInfo fileFromGCS = GCSService.uploadFileGCS(uploadReqDto);
+//        return ResponseEntity.ok(fileFromGCS.toString());
+//    }
 }

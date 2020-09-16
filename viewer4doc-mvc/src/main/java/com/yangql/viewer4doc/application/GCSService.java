@@ -17,16 +17,16 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class GCSService {
 
-    private final Storage storage;
-
-    @SuppressWarnings("deprecation")
-    public BlobInfo uploadFileGCS(UploadReqDto uploadReqDto) throws FileNotFoundException {
-        BlobInfo blobInfo = storage.create(
-                BlobInfo.newBuilder(uploadReqDto.getBucketName(), uploadReqDto.getUploadFileName())
-                        .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllAuthenticatedUsers(), Acl.Role.READER))))
-                        .build(),
-                new FileInputStream(uploadReqDto.getLocalFileLocation()));
-
-        return blobInfo;
-    }
+//    private final Storage storage;
+//
+//    @SuppressWarnings("deprecation")
+//    public BlobInfo uploadFileGCS(UploadReqDto uploadReqDto) throws FileNotFoundException {
+//        BlobInfo blobInfo = storage.create(
+//                BlobInfo.newBuilder(uploadReqDto.getBucketName(), uploadReqDto.getUploadFileName())
+//                        .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllAuthenticatedUsers(), Acl.Role.READER))))
+//                        .build(),
+//                new FileInputStream(uploadReqDto.getLocalFileLocation()));
+//
+//        return blobInfo;
+//    }
 }
