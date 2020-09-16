@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Viewer4doc-Login-API")
+                .title("Viewer4doc-Admin-API")
                 .version("1.0")
                 .description("viewer4doc 의 Admin API 입니다.")
 //                .license("라이센스 작성")
