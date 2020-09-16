@@ -3,7 +3,7 @@
 
 ## 프로젝트 소개
 
-<img src="img/Architecture0916.png" width="640px" height="480px">
+<img src="img/Architecture0916.png">
 
 ## 개발환경
 
@@ -14,7 +14,3 @@
 ## API 목록
 
 ## DB
-
-## Author
-
-* [양재혁](https://github.com/yangjae33)
