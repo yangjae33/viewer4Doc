@@ -9,6 +9,12 @@
 
 <img src="img/Architecture0916.png">
 
+## 개발 환경
+
+  * Springboot 2.3.2
+  * jdk 1.8
+  * Gradle 6.4.1
+  
 ## 설치 및 사용법
 
 ```
