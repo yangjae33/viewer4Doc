@@ -1,9 +1,9 @@
 
-###### 최종 수정일 : 2020-09-07
+###### 최종 수정일 : 2020-09-16
 
 ## 프로젝트 소개
 
-<img src="img/oldArchitecture.png" width="640px" height="480px">
+<img src="img/newArchitecture.png" width="640px" height="480px">
 
 ## 개발환경
 
@@ -18,5 +18,3 @@
 ## Author
 
 * [양재혁](https://github.com/yangjae33)
-
-## TEAM 함께타조
