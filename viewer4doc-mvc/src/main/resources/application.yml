@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/data/viewer4doc
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+
+spring:
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      location: /Users/mac/Desktop/uploads
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+---
+spring:
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    check-template-location: true
+    enabled: true
+    encoding: UTF-8
+
+#---
+#spring:
+#  cloud:
+#    gcp:
+#      credentials:
+#        location: classpath:viewer4doc-899b8c66edfa.json
+
+---
+
+spring:
+  profiles: mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
+    username: ${MYSQL_USER:viewer4doc}
+    password: ${MYSQL_PASSWORD:viewer4doc}
+  #    schema: classpath*:db/mysql/schema.sql
+  #    data: classpath*:db/mysql/data.sql
+  #    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: true
+    show-sql: true

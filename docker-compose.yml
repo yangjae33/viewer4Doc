@@ -1,0 +1,66 @@
+version: '3'
+services:
+
+  mysql:
+    image: mariadb:10.4.7
+    env_file: .env
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+#      - ./init.sql:/data/application/init.sql
+    ports:
+      - "13306:3306"
+    command:
+#      --init-file /data/application/init.sql
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  login-api:
+    image: openjdk:8
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/viewer4doc/run.sh
+      - ./viewer4doc-login-api/build/libs:/home/viewer4doc/libs
+    ports:
+      - 8001:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/viewer4doc && sh run.sh"
+
+  admin-api:
+    image: openjdk:8
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/viewer4doc/run.sh
+      - ./viewer4doc-admin-api/build/libs:/home/viewer4doc/libs
+    ports:
+      - 8002:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/viewer4doc && sh run.sh"
+  user-api:
+    image: openjdk:8
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/viewer4doc/run.sh
+      - ./viewer4doc-user-api/build/libs:/home/viewer4doc/libs
+    ports:
+      - 8003:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/viewer4doc && sh run.sh"
+
+  mvc-api:
+    image: openjdk:8
+    env_file: .env
+    volumes:
+      - ./run.sh:/home/viewer4doc/run.sh
+      - ./viewer4doc-mvc/build/libs:/home/viewer4doc/libs
+    ports:
+      - 8004:8080
+    depends_on:
+      - mysql
+    command: bash -c "cd /home/viewer4doc && sh run.sh"
