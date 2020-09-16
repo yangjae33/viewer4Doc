@@ -1,14 +1,6 @@
-FROM adoptopenjdk:8-jdk-hotspot AS builder
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
-RUN chmod +x ./gradlew
-RUN ./gradlew bootJar
+FROM openjdk:8-jdk
 
-FROM adoptopenjdk:8-jdk-hotspot
-COPY --from=builder build/libs/*.jar app.jar
+COPY ./viewer4doc /viewer4doc
+WORKDIR /viewer4doc
 
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD ["./gradlew", "bootRun"]
