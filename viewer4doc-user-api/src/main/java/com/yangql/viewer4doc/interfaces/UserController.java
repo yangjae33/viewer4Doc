@@ -24,8 +24,8 @@ public class UserController {
     private UserService userService;
 
     @ApiOperation(
-            value = "SignUp",
-            notes = "회원가입",
+            value = "사용자 회원가입",
+            //notes = "회원가입",
             httpMethod = "POST",
             produces = "application/json",
             consumes = "application/json",
