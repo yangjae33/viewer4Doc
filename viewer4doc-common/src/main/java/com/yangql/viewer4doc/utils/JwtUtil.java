@@ -16,13 +16,11 @@ public class JwtUtil {
 
     }
 
-    public String createToken(Long userId, String name, Long fileId) {
+    public String createToken(Long userId, String email) {
         JwtBuilder builder = Jwts.builder()
                 .claim("userId",userId)
-                .claim("name",name);
-        if(fileId != null){
-            builder = builder.claim("fileId",fileId);
-        }
+                .claim("email",email);
+
         return builder
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

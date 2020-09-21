@@ -14,12 +14,12 @@ public class SessionErrorAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmailNotExistedException.class)
     public String handleEmailNotExisted(){
-        return "{}";
+        return "Email Not Existed";
     }
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordWrongException.class)
     public String handlePasswordWrong(){
-        return "{}";
+        return "Wrong Password";
     }
 }
