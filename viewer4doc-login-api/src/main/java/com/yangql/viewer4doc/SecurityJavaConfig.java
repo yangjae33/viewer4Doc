@@ -9,10 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
+public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -28,15 +30,19 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/**/*").denyAll();
+//        http.authorizeRequests()
+//                .antMatchers(AUTH_WHITELIST).permitAll()
+//                .antMatchers("/**/*").denyAll();
         http
-                .cors().disable()
+                .cors().and()
                 .csrf().disable()
                 .formLogin().disable()
                 .headers().frameOptions().disable();
 
+    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedMethods("*");
     }
 
     @Bean
