@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,8 +21,8 @@ import java.net.URISyntaxException;
 @CrossOrigin
 @RestController
 public class UploadFileController {
-    public static final String UPLOAD_DIR = "./uploads";
-
+    //public static final String UPLOAD_DIR = "./uploads";
+    public static final String UPLOAD_DIR = System.getProperty("user.dir")+"/uploads";
 //    public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
 
     @Autowired
@@ -32,6 +34,17 @@ public class UploadFileController {
             @RequestParam("file") MultipartFile file,
             HttpServletRequest request
     ) throws IOException, URISyntaxException {
+
+        String savePath = System.getProperty("user.dir") + "/uploads";
+
+        if (!new File(savePath).exists()) {
+            try{
+                new File(savePath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
 
         String url = "/api/upload";
         Claims claims = (Claims)authentication.getPrincipal();

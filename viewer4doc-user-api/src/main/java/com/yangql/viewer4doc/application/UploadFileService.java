@@ -2,12 +2,15 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,8 +22,8 @@ import java.nio.file.StandardCopyOption;
 public class UploadFileService {
 
 //    public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
-
-    public final static String UPLOAD_DIR = "./uploads";
+//    public final static String UPLOAD_DIR = "./uploads";
+    public final static String UPLOAD_DIR = System.getProperty("user.dir")+"/uploads";
 
     FileInfoRepository fileInfoRepository;
 
@@ -28,6 +31,8 @@ public class UploadFileService {
     public UploadFileService(FileInfoRepository fileInfoRepository){
         this.fileInfoRepository = fileInfoRepository;
     }
+
+
 
     public FileInfo uploadFile(MultipartFile file,Long userId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -40,6 +45,7 @@ public class UploadFileService {
         }
         int pos = fileName.lastIndexOf(".");
         String ext = fileName.substring(pos+1);
+        String pureFileName = fileName.substring(0,pos);
         System.out.println(ext);
         if(
                 !(ext.equals("docx") ||
@@ -53,8 +59,8 @@ public class UploadFileService {
         Files.copy(file.getInputStream(), path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
         FileInfo newfile = FileInfo.builder()
-                .name(fileName)
-                .link("*** Saved path ***")
+                .name(pureFileName+".pdf")
+                .link(Paths.get(UPLOAD_DIR+"/"+fileName).normalize().toString())
                 .org_name(fileName)
                 .pub_id(userId)
                 .build();
