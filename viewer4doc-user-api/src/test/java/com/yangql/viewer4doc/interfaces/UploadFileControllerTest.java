@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import org.junit.jupiter.api.Test;
@@ -44,18 +45,18 @@ class UploadFileControllerTest {
                 .org_name("test.txt")
                 .build();
 
-        given(uploadFileService.uploadFile(mockMultipartFile)).willReturn(mockFile);
+        given(uploadFileService.uploadFile(mockMultipartFile,1L)).willReturn(mockFile);
 
         mvc.perform(builder)
                 .andExpect(status().isCreated());
 
-        verify(uploadFileService).uploadFile(mockMultipartFile);
+        verify(uploadFileService).uploadFile(mockMultipartFile,1L);
     }
     @Test
     public void uploadWithNotExistFileAPI() throws Exception {
         MockMultipartFile mockMultipartFile = null;
 
-        given(uploadFileService.uploadFile(mockMultipartFile))
+        given(uploadFileService.uploadFile(mockMultipartFile,1L))
                 .willThrow(UploadFileNotExistException.class);
     }
 }
