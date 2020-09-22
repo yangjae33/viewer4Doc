@@ -2,7 +2,6 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.ConvertFileService;
 import com.yangql.viewer4doc.application.UploadFileService;
-import com.yangql.viewer4doc.application.UploadWithInvalidExtensionException;
 import com.yangql.viewer4doc.domain.FileInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,15 +21,14 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.*;
 
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.longThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FileController.class)
-class FileControllerTest {
+@WebMvcTest(UploadFileController.class)
+class UploadFileControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -52,7 +50,7 @@ class FileControllerTest {
     @Test
     public void uploadFileOnWebPage() throws Exception {
         String fileName = "test.txt";
-        File file = new File(FileController.UPLOAD_DIR+fileName);
+        File file = new File(UploadFileController.UPLOAD_DIR+fileName);
         file.delete();
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
@@ -70,7 +68,7 @@ class FileControllerTest {
     @Test
     public void uploadFileAPI() throws Exception {
         String fileName = "test.txt";
-        File file = new File(FileController.UPLOAD_DIR+fileName);
+        File file = new File(UploadFileController.UPLOAD_DIR+fileName);
         file.delete();
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,

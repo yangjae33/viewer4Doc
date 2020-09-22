@@ -38,7 +38,7 @@ class FileInfoControllerTest {
         );
         given(fileService.getFiles()).willReturn(fileInfos);
 
-        mvc.perform(get("/api/files"))
+        mvc.perform(get("/admin/files"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1")
@@ -54,7 +54,7 @@ class FileInfoControllerTest {
                 .build();
         given(fileService.getFile(1L)).willReturn(fileInfo);
 
-        mvc.perform(get("/api/file/1"))
+        mvc.perform(get("/admin/file/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1")

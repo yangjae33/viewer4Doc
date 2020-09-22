@@ -22,4 +22,6 @@ public class FileInfo {
     private String name;
 
     private String link;
+
+    private Long pub_id;
 }
