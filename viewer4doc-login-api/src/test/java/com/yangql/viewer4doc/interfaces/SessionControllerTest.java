@@ -47,7 +47,7 @@ class SessionControllerTest {
 
         given(userService.authenticate(email,password)).willReturn(mockUserInfo);
 
-        given(jwtUtil.createToken(id,name,null)).willReturn("header.payload.signiture");
+        given(jwtUtil.createToken(id,email)).willReturn("header.payload.signiture");
 
         mvc.perform(post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class SessionControllerTest {
 
         given(userService.authenticate(email,password)).willReturn(mockUserInfo);
 
-        given(jwtUtil.createToken(id,name, 369L)).willReturn("header.payload.signature");
+        given(jwtUtil.createToken(id,email)).willReturn("header.payload.signature");
 
         mvc.perform(post("/session")
                 .contentType(MediaType.APPLICATION_JSON)

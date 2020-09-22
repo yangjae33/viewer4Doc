@@ -25,7 +25,7 @@ import java.nio.file.StandardCopyOption;
 
 @CrossOrigin
 @Controller
-public class FileController {
+public class UploadFileController {
 
     public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
 
