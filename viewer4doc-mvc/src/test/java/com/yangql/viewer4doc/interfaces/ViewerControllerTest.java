@@ -15,9 +15,9 @@ class ViewerControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    public void show() throws Exception {
-        mvc.perform(get("/viewer4doc"))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    public void show() throws Exception {
+//        mvc.perform(get("/viewer4doc"))
+//                .andExpect(status().isOk());
+//    }
 }

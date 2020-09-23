@@ -101,7 +101,6 @@ public class FileController {
         List<FileInfo> myFileInfo = fileService.getMyFiles(userId);
         return myFileInfo;
     }
-
     @ApiOperation(
             value = "나에게 공유된 파일 리스트",
             notes = "로그인 시 받은 accessToken을 header에 입력(Bearer Token)",

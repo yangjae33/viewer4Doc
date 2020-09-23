@@ -90,18 +90,18 @@ class FileControllerTest {
         given(fileService.uploadFile(mockMultipartFile,30L))
                 .willThrow(UploadFileNotExistException.class);
     }
-    @Test
-    public void downloadFile() throws Exception {
-        Long fileId = 1L;
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMwLCJlbWFpbCI6InRlc3QxIn0.uVHzuqkAwnxdOcH9TMju1RcbbfeqVaVJ_y5fwVoCfeY";
-
-        mvc.perform(get("/api/download/1")
-                .header("Authorization", ":Bearer "+token)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(
-                        containsString("\"id\":1")
-                ));
-    }
+//    @Test
+//    public void downloadFile() throws Exception {
+//        Long fileId = 1L;
+//        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMwLCJlbWFpbCI6InRlc3QxIn0.uVHzuqkAwnxdOcH9TMju1RcbbfeqVaVJ_y5fwVoCfeY";
+//
+//        mvc.perform(get("/api/download/60")
+//                .header("Authorization", ":Bearer "+token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//        )
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(
+//                        containsString("\"id\":1")
+//                ));
+//    }
 }
