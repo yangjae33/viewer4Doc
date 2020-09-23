@@ -12,12 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ViewerController.class)
 class ViewerControllerTest {
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @Test
-//    public void show() throws Exception {
-//        mvc.perform(get("/viewer4doc"))
-//                .andExpect(status().isOk());
-//    }
+    @Autowired
+    private MockMvc mvc;
+
+    @Test
+    public void show() throws Exception {
+        mvc.perform(get("/viewer4doc"))
+                .andExpect(status().isOk());
+    }
 }

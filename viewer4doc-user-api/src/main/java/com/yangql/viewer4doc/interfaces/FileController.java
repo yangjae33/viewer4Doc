@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import io.jsonwebtoken.Claims;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

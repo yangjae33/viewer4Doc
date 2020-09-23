@@ -1,6 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.UploadFileService;
+import com.google.common.net.HttpHeaders;
+import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.TestVo;
 import io.jsonwebtoken.Claims;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,12 +31,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 @CrossOrigin
 @Controller
-public class UploadFileController {
+public class FileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
     public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
     @Autowired
-    private UploadFileService uploadFileService;
+    private FileService fileService;
 
     @GetMapping("/web/")
     public String homepage(){
@@ -107,7 +110,7 @@ public class UploadFileController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
-        FileInfo newfile = uploadFileService.uploadFile(file,userId);
+        FileInfo newfile = fileService.uploadFile(file,userId);
 
         return ResponseEntity.created(new URI(url)).body(newfile);
     }
@@ -150,6 +153,7 @@ public class UploadFileController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
+            Authentication authentication,
             @RequestParam(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
 
@@ -165,7 +169,7 @@ public class UploadFileController {
         }
         String url = "/api/upload-to-pdf";
 
-        FileInfo newFile = uploadFileService.uploadFileToPDF(file);
+        FileInfo newFile = fileService.uploadFileToPDF(file);
 
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
@@ -175,5 +179,37 @@ public class UploadFileController {
         TestVo testModel = new TestVo("jaehyuk","yang");
         model.addAttribute("testModel",testModel);
         return "thymeleafTest";
+    }
+
+    @ApiOperation(
+            value = "다운로드",
+            httpMethod = "GET",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    @GetMapping("/api/download/{fileId}")
+    public ResponseEntity<Resource> downloadFile(
+            Authentication authentication,
+            @PathVariable("fileId") Long fileId
+    ) throws FileNotFoundException {
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+
+        Resource resource = fileService.loadAsResource(fileId);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;" +
+                        "filename=\""+resource.getFilename()+"\"").body(resource);
     }
 }

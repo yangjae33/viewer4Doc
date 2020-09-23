@@ -2,17 +2,20 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
-import com.yangql.viewer4doc.interfaces.UploadFileController;
+import com.yangql.viewer4doc.interfaces.FileController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,14 +23,14 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 @Transactional
-public class UploadFileService {
+public class FileService {
 
-    public final static String UPLOAD_DIR = UploadFileController.UPLOAD_DIR;
+    public final static String UPLOAD_DIR = FileController.UPLOAD_DIR;
 
     FileInfoRepository fileInfoRepository;
 
     @Autowired
-    public UploadFileService(FileInfoRepository fileInfoRepository){
+    public FileService(FileInfoRepository fileInfoRepository){
         this.fileInfoRepository = fileInfoRepository;
     }
 
@@ -114,5 +117,23 @@ public class UploadFileService {
                 .build();
 
         return fileInfoRepository.save(newFile);
+    }
+
+    public Resource loadAsResource(Long fileId) throws FileNotFoundException {
+        try{
+            FileInfo fileInfo = fileInfoRepository.findById(fileId).orElse(null);
+            Path file = Paths.get(System.getProperty("user.dir")+"/uploads/"+fileInfo.getOrg_name());
+            Resource resource = new UrlResource(file.toUri());
+            if(resource.exists() || resource.isReadable()){
+                return resource;
+            }
+            else{
+                throw new FileNotFoundException(
+                        "Could not read file:" + fileInfo.getOrg_name());
+            }
+        } catch (MalformedURLException | FileNotFoundException e) {
+            throw new FileNotFoundException("Could not read file");
+        }
+
     }
 }
