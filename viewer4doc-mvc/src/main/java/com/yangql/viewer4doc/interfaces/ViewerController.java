@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ViewerController {
 
-    @GetMapping("/viewer4doc")
+    @GetMapping("/web/viewer4doc")
     public String showViewer(
             @RequestParam Long fileId
     ){

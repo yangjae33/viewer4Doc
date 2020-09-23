@@ -41,6 +41,9 @@ public class UserInfo {
     public boolean isActive(){
         return level>0L;
     }
+    public boolean isCorp(){
+        return level>=100L;
+    }
 
     public void setFileId(Long fileId){
         this.level = 50L;

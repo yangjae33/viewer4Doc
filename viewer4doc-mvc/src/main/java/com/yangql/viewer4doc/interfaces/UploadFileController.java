@@ -3,18 +3,22 @@ package com.yangql.viewer4doc.interfaces;
 import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.TestVo;
+import io.jsonwebtoken.Claims;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,17 +26,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
 @CrossOrigin
 @Controller
 public class UploadFileController {
 
-    public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
-
+    //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
+    public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
     @Autowired
     private UploadFileService uploadFileService;
 
-    @GetMapping("/")
+    @GetMapping("/web/")
     public String homepage(){
         return "index";
     }
@@ -41,6 +44,17 @@ public class UploadFileController {
     public String uploadFile(
             @RequestParam("file") MultipartFile file, RedirectAttributes attributes
     ) throws IOException {
+        String savePath = System.getProperty("user.dir") + "/uploads/";
+
+        if (!new File(savePath).exists()) {
+            try{
+                new File(savePath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+
         if(file.isEmpty()){
             attributes.addFlashAttribute("message","no file to upload");
             return "redirect:/";
@@ -57,33 +71,97 @@ public class UploadFileController {
         return "redirect:/";
     }
 
+    @ApiOperation(
+            value = "파일 업로드",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
     public ResponseEntity<?> uploadFileWithResponseJson(
+            Authentication authentication,
             @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
-        if(file.isEmpty()){
-            throw new UploadFileNotExistException();
+
+        String savePath = System.getProperty("user.dir") + "/uploads/";
+
+        if (!new File(savePath).exists()) {
+            try{
+                new File(savePath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
         }
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         String url = "/api/upload";
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
 
-        FileInfo newfile = uploadFileService.uploadFile(file);
+        FileInfo newfile = uploadFileService.uploadFile(file,userId);
 
         return ResponseEntity.created(new URI(url)).body(newfile);
     }
+    @ApiOperation(
+            value = "PDF파일로 변환",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/convert")
     public ResponseEntity<?> convertFile(
             @RequestParam("fileId") String fileId
     ){
         return null;
     }
+
+    @ApiOperation(
+            value = "업로드 및 PDF파일로 변환",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
-            @RequestParam(value = "file",required = false) MultipartFile file
+            @RequestParam(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
-        if(file.isEmpty()){
-            throw new UploadFileNotExistException();
+
+        String savePath = System.getProperty("user.dir") + "/uploads/";
+
+        if (!new File(savePath).exists()) {
+            try{
+                new File(savePath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
         }
         String url = "/api/upload-to-pdf";
 
@@ -91,7 +169,8 @@ public class UploadFileController {
 
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
-    @GetMapping("/thymeleaf")
+
+    @GetMapping("/web/thymeleaf")
     public String thymeleafTest2(Model model){
         TestVo testModel = new TestVo("jaehyuk","yang");
         model.addAttribute("testModel",testModel);

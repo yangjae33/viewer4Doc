@@ -1,6 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.ConvertFileService;
+import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -33,20 +35,9 @@ class UploadFileControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Autowired
-    private WebApplicationContext wac;
-
     @MockBean
     private UploadFileService uploadFileService;
 
-    @MockBean
-    private ConvertFileService convertFileService;
-
-    @BeforeEach
-    public void setUp(){
-        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
-        this.mvc = builder.build();
-    }
     @Test
     public void uploadFileOnWebPage() throws Exception {
         String fileName = "test.txt";
@@ -67,15 +58,20 @@ class UploadFileControllerTest {
     }
     @Test
     public void uploadFileAPI() throws Exception {
-        String fileName = "test.txt";
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMwLCJlbWFpbCI6InRlc3QxIn0.uVHzuqkAwnxdOcH9TMju1RcbbfeqVaVJ_y5fwVoCfeY";
+
+        String fileName = "test.docx";
         File file = new File(UploadFileController.UPLOAD_DIR+fileName);
         file.delete();
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
                 "text/plain", "test data".getBytes());
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/api/upload")
-                        .file(mockMultipartFile);
+                MockMvcRequestBuilders
+                        .multipart("/api/upload")
+                        .file(mockMultipartFile)
+                        .header("Authorization", ":Bearer "+token)
+                        .contentType(MediaType.APPLICATION_JSON);
 
         FileInfo mockFile = FileInfo.builder()
                 .name("test.txt")
@@ -83,53 +79,19 @@ class UploadFileControllerTest {
                 .org_name("test.txt")
                 .build();
 
-        given(uploadFileService.uploadFile(mockMultipartFile)).willReturn(mockFile);
+        given(uploadFileService.uploadFile(mockMultipartFile,30L)).willReturn(mockFile);
 
         mvc.perform(builder)
                 .andExpect(status().isCreated());
 
-        verify(uploadFileService).uploadFile(mockMultipartFile);
+        verify(uploadFileService).uploadFile(mockMultipartFile,30L);
+
     }
     @Test
     public void uploadWithNotExistFileAPI() throws Exception {
         MockMultipartFile mockMultipartFile = null;
 
-        given(uploadFileService.uploadFile(mockMultipartFile))
+        given(uploadFileService.uploadFile(mockMultipartFile,30L))
                 .willThrow(UploadFileNotExistException.class);
-    }
-
-    @Test
-    public void convert() throws IOException {
-        Long fileId = 1L;
-        convertFileService.convertFile(fileId);
-
-        Runtime rt = Runtime.getRuntime();
-        Process p;
-        String baseURL = "/Users/mac/Desktop/";
-        String TempFileName = "test";
-        String fileName = "test.docx";
-        String cmd = "python2 " + baseURL + "unoconv/unoconv.py -i utf8 -f pdf --output=" + baseURL + "converts/"
-                + TempFileName + ".pdf " + baseURL + "uploads/" + fileName;
-        p = rt.exec(cmd);
-
-        InputStream in = p.getInputStream();
-        InputStreamReader isr = new InputStreamReader(in);
-        BufferedReader is = null;
-        BufferedReader es = null;
-        es = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        is = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while ((line = is.readLine()) != null) {
-            System.out.println(line);
-        }
-        while ((line = es.readLine()) != null) {
-            System.out.println(line);
-        }
-        if (is != null)
-            is.close();
-        if (es != null)
-            es.close();
-
-
     }
 }

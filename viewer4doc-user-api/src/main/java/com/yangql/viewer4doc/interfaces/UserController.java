@@ -25,7 +25,6 @@ public class UserController {
 
     @ApiOperation(
             value = "사용자 회원가입",
-            //notes = "회원가입",
             httpMethod = "POST",
             produces = "application/json",
             consumes = "application/json",
@@ -34,7 +33,9 @@ public class UserController {
     )
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created"),
-            @ApiResponse(code = 400, message = "Existed Email")
+            @ApiResponse(code = 400, message = "Existed Email"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/users")

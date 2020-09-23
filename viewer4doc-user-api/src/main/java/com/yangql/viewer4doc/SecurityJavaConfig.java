@@ -29,7 +29,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements 
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/v2/api-docs",
-            "/webjars/**"
+            "/webjars/**",
+            "/h2-console"
     };
 
     @Override
@@ -38,9 +39,8 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements 
         Filter filter = new JwtAuthenticationFilter(
                 authenticationManager(),jwtUtil());
 
-//        http.authorizeRequests()
-//                .antMatchers(AUTH_WHITELIST).permitAll()
-//                .antMatchers("/**/*").denyAll();
+        http.authorizeRequests()
+                .antMatchers(AUTH_WHITELIST).permitAll();
         http
                 .cors().disable()
                 .csrf().disable()

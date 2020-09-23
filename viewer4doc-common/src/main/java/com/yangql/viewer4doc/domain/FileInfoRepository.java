@@ -12,6 +12,6 @@ public interface FileInfoRepository extends CrudRepository<FileInfo,Long> {
     Optional<FileInfo> findById(Long id);
     FileInfo save(FileInfo fileInfo);
 
-    @Query("SELECT f.id,f.name FROM FileInfo f where f.pub_id = :pub_id")
+    @Query("SELECT f FROM FileInfo f where f.pub_id = :pub_id")
     List<FileInfo> findAllByPubId(@Param("pub_id") Long pub_id);
 }
