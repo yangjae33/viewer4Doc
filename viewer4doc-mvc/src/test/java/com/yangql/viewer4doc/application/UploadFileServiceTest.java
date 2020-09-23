@@ -49,7 +49,7 @@ class UploadFileServiceTest {
 
         given(fileInfoRepository.save(mockFileinfo)).willReturn(mockFileinfo);
 
-        FileInfo newFile = uploadFileService.uploadFile(mockMultipartFile);
+        FileInfo newFile = uploadFileService.uploadFile(mockMultipartFile,30L);
 
         verify(fileInfoRepository).save(any());
 

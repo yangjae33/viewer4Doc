@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
+import com.yangql.viewer4doc.interfaces.UploadFileController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,7 +22,7 @@ import java.nio.file.StandardCopyOption;
 @Transactional
 public class UploadFileService {
 
-    public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
+    public final static String UPLOAD_DIR = UploadFileController.UPLOAD_DIR;
 
     FileInfoRepository fileInfoRepository;
 
@@ -30,29 +31,35 @@ public class UploadFileService {
         this.fileInfoRepository = fileInfoRepository;
     }
 
-    public FileInfo uploadFile(MultipartFile file) throws IOException {
-
+    public FileInfo uploadFile(MultipartFile file,Long userId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+        if(file.isEmpty()){
+            throw new UploadFileNotExistException();
+        }
+        if(fileName.contains("..")){
+            throw new UploadFileException();
+        }
         int pos = fileName.lastIndexOf(".");
         String ext = fileName.substring(pos+1);
+        String pureFileName = fileName.substring(0,pos);
         System.out.println(ext);
-
         if(
                 !(ext.equals("docx") ||
-                ext.equals("pdf") || ext.equals("xlsx") ||
-                ext.equals("hwp")|| ext.equals("pptx"))
+                        ext.equals("pdf") || ext.equals("xlsx") ||
+                        ext.equals("hwp")|| ext.equals("pptx"))
         ){
             throw new UploadWithInvalidExtensionException(fileName);
         }
 
-        Path path = Paths.get(UPLOAD_DIR+fileName);
-        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        Path path = Paths.get(UPLOAD_DIR);
+        Files.copy(file.getInputStream(), path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
         FileInfo newfile = FileInfo.builder()
-                .name(fileName)
-                .link("*** Saved path ***")
+                .name(pureFileName+".pdf")
+                .link(Paths.get(UPLOAD_DIR+"/"+fileName).normalize().toString())
                 .org_name(fileName)
+                .pub_id(userId)
                 .build();
 
         return fileInfoRepository.save(newfile);
@@ -73,15 +80,15 @@ public class UploadFileService {
             throw new UploadWithInvalidExtensionException(fileName);
         }
 
-        Path path = Paths.get(UPLOAD_DIR+fileName);
-        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        Path path = Paths.get(UPLOAD_DIR);
+        Files.copy(file.getInputStream(), path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
 
         Runtime rt = Runtime.getRuntime();
         Process p;
-        String baseURL = "/Users/mac/Desktop/";
-        String cmd = "python2 " + baseURL + "unoconv/unoconv.py -i utf8 -f pdf --output=" + baseURL + "converts/"
-                + newFilename +" "+ baseURL + "uploads/" + fileName;
+        String baseURL = System.getProperty("user.dir");
+        String cmd = "python2 " + baseURL + "/unoconv/unoconv.py -i utf8 -f pdf --output=" + baseURL + "/converts/"
+                + newFilename +" "+ baseURL + "/uploads/" + fileName;
         p = rt.exec(cmd);
 
         BufferedReader is;
