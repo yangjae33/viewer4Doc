@@ -1,24 +1,23 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadFileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.TestVo;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -27,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
 @CrossOrigin
 @Controller
 public class UploadFileController {
@@ -37,7 +35,7 @@ public class UploadFileController {
     @Autowired
     private UploadFileService uploadFileService;
 
-    @GetMapping("/")
+    @GetMapping("/web/")
     public String homepage(){
         return "index";
     }
@@ -73,6 +71,21 @@ public class UploadFileController {
         return "redirect:/";
     }
 
+    @ApiOperation(
+            value = "파일 업로드",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
     public ResponseEntity<?> uploadFileWithResponseJson(
             Authentication authentication,
@@ -98,16 +111,46 @@ public class UploadFileController {
 
         return ResponseEntity.created(new URI(url)).body(newfile);
     }
-
+    @ApiOperation(
+            value = "PDF파일로 변환",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/convert")
     public ResponseEntity<?> convertFile(
             @RequestParam("fileId") String fileId
     ){
         return null;
     }
+
+    @ApiOperation(
+            value = "업로드 및 PDF파일로 변환",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
-            @RequestParam(value = "file",required = false) MultipartFile file
+            @RequestParam(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -126,7 +169,8 @@ public class UploadFileController {
 
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
-    @GetMapping("/thymeleaf")
+
+    @GetMapping("/web/thymeleaf")
     public String thymeleafTest2(Model model){
         TestVo testModel = new TestVo("jaehyuk","yang");
         model.addAttribute("testModel",testModel);
