@@ -41,7 +41,6 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements 
 
         http.authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll();
-//                .antMatchers("/**/*").denyAll();
         http
                 .cors().disable()
                 .csrf().disable()

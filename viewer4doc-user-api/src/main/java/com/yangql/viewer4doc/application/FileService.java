@@ -37,9 +37,6 @@ public class FileService {
 
         return myfileInfos;
     }
-    public Share addShare(Share share){
-        return shareRepository.save(share);
-    }
     public List<FileInfo> getSharedFiles(Long id){
         List<Share> shares = shareRepository.findAllByUserId(id);
         List<FileInfo> sharedfileInfos = new ArrayList<>();
@@ -52,5 +49,4 @@ public class FileService {
         }
         return sharedfileInfos;
     }
-
 }

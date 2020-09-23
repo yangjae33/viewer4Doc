@@ -2,7 +2,7 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
-import com.yangql.viewer4doc.interfaces.UploadFileController;
+import com.yangql.viewer4doc.interfaces.FileController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-class UploadFileServiceTest {
+class FileServiceTest {
 
-    private UploadFileService uploadFileService;
+    private FileService fileService;
 
     @Mock
     private FileInfoRepository fileInfoRepository;
@@ -31,13 +31,13 @@ class UploadFileServiceTest {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        uploadFileService = new UploadFileService(fileInfoRepository);
+        fileService = new FileService(fileInfoRepository);
     }
     @Test
     public void upload() throws Exception {
 
         String fileName = "test.docx";
-        File file = new File(UploadFileController.UPLOAD_DIR+fileName);
+        File file = new File(FileController.UPLOAD_DIR+fileName);
         file.delete();
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
@@ -67,7 +67,7 @@ class UploadFileServiceTest {
     @Test
     public void uploadToPDF() throws IOException {
         String fileName = "test.docx";
-        File file = new File(UploadFileController.UPLOAD_DIR+fileName);
+        File file = new File(FileController.UPLOAD_DIR+fileName);
         file.delete();
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file",fileName,
@@ -84,5 +84,9 @@ class UploadFileServiceTest {
         //verify(fileInfoRepository).save(any());
 
         //Assertions.assertTrue(file.exists());
+    }
+    @Test
+    public void downloadFile(){
+        Long fileId = 1L;
     }
 }

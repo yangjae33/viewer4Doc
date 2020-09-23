@@ -58,16 +58,7 @@ class FileInfoServiceTest {
         fileService.addFile(fileInfo);
         verify(fileInfoRepository).save(any());
     }
-    @Test
-    public void addShare(){
-        Share share = Share.builder()
-                .userId(1L)
-                .fileId(2L)
-                .level(1L)
-                .build();
-        fileService.addShare(share);
-        verify(shareRepository).save(any());
-    }
+
     @Test
     public void getFiles(){
         List<FileInfo> fileInfos = fileService.getFiles();
