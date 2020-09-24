@@ -45,7 +45,7 @@ public class FileController {
 
     @PostMapping("/web/upload")
     public String uploadFile(
-            @RequestParam("file") MultipartFile file, RedirectAttributes attributes
+            @RequestPart("file") MultipartFile file, RedirectAttributes attributes
     ) throws IOException {
         String savePath = System.getProperty("user.dir") + "/uploads/";
 
@@ -92,7 +92,7 @@ public class FileController {
     @PostMapping("/api/upload")
     public ResponseEntity<?> uploadFileWithResponseJson(
             Authentication authentication,
-            @RequestParam("file") MultipartFile file
+            @RequestPart("file") MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -154,7 +154,7 @@ public class FileController {
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
             Authentication authentication,
-            @RequestParam(value = "file",required = true) MultipartFile file
+            @RequestPart(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";

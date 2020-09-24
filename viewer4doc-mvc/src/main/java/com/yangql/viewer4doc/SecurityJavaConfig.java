@@ -30,7 +30,9 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements 
             "/swagger-ui.html",
             "/v2/api-docs",
             "/webjars/**",
-            "/h2-console"
+            "/h2-console",
+            "/web/*"
+
     };
 
     @Override
