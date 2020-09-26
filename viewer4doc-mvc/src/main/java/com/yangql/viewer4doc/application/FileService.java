@@ -2,7 +2,10 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
+import com.yangql.viewer4doc.domain.Share;
+import com.yangql.viewer4doc.domain.ShareRepository;
 import com.yangql.viewer4doc.interfaces.FileController;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -27,7 +30,6 @@ import java.time.LocalDateTime;
 public class FileService {
 
     public final static String UPLOAD_DIR = FileController.UPLOAD_DIR;
-
     FileInfoRepository fileInfoRepository;
 
     @Autowired
@@ -67,6 +69,11 @@ public class FileService {
                 .createdTimeAt(LocalDateTime.now())
                 .fileSize(Math.round(file.getSize()*0.0009765625))//KB
                 .level(1L)
+                .build();
+        Share share = Share.builder()
+                .fileId(newFile.getId())
+                .userId(newFile.getPubId())
+                .level(0L)
                 .build();
 
         return fileInfoRepository.save(newFile);
@@ -122,6 +129,12 @@ public class FileService {
                 .createdTimeAt(LocalDateTime.now())
                 .fileSize(Math.round(file.getSize()*0.0009765625))//KB
                 .level(1L)
+                .build();
+
+        Share share = Share.builder()
+                .fileId(newFile.getId())
+                .userId(newFile.getPubId())
+                .level(0L)
                 .build();
 
         return fileInfoRepository.save(newFile);
