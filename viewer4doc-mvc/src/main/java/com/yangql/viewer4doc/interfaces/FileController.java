@@ -167,6 +167,20 @@ public class FileController {
                 e.getStackTrace();
             }
         }
+        String convertPath = System.getProperty("user.dir") + "/converts/";
+
+        if (!new File(convertPath).exists()) {
+            try{
+                new File(convertPath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+
         String url = "/api/upload-to-pdf";
 
         FileInfo newFile = fileService.uploadFileToPDF(file);

@@ -2,10 +2,15 @@ HELP.md
 .gradle
 build/
 uploads/
+data/
 converts/
+office/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### Mac OS
+.DS_Store
 
 ### STS ###
 .apt_generated
