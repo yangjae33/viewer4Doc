@@ -25,4 +25,8 @@ public class ShareService {
         shareRepository.updateShare(share.getUserId(),share.getFileId(),share.getLevel());
         return;
     }
+
+    public List<Share> getShareListByFileId(Long fileId) {
+        return shareRepository.findAllByFileId(fileId);
+    }
 }

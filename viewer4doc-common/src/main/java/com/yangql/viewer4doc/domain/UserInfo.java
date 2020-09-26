@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -23,22 +24,28 @@ public class UserInfo {
     @Setter
     private String name;
 
+    @JsonIgnore
     private String password;
 
     @Setter
     @NotNull
+    @JsonIgnore
     private Long level;
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonIgnore
     public boolean isPublisher() {
         return level==50L;
     }
+    @JsonIgnore
     public boolean isActive(){
         return level>0L;
     }
+    @JsonIgnore
     public boolean isCorp(){
         return level>=100L;
     }

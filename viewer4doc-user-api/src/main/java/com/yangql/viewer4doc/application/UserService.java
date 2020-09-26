@@ -39,4 +39,8 @@ public class UserService {
                 .build();
         return userRepository.save(userInfo);
     }
+    public UserInfo getUserById(Long userId){
+        UserInfo userInfo = userRepository.findById(userId).orElse(null);
+        return userInfo;
+    }
 }
