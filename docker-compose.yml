@@ -59,6 +59,8 @@ services:
     volumes:
       - ./run.sh:/home/viewer4doc/run.sh
       - ./viewer4doc-mvc/build/libs:/home/viewer4doc/libs
+      - ./unoconv:/home/viewer4doc/unoconv
+      - ./office:/home/viewer4doc/office
     ports:
       - 8004:8080
     depends_on:

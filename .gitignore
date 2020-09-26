@@ -8,6 +8,9 @@ converts/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### Mac OS
+.DS_Store
+
 ### STS ###
 .apt_generated
 .classpath
