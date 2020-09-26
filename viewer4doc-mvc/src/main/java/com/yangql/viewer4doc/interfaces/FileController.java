@@ -2,7 +2,9 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.FileInfo;
+import com.yangql.viewer4doc.domain.Share;
 import com.yangql.viewer4doc.domain.TestVo;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +39,9 @@ public class FileController {
     public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    ShareService shareService;
 
     @GetMapping("/web/")
     public String homepage(){
@@ -111,7 +116,12 @@ public class FileController {
         Long userId = claims.get("userId",Long.class);
 
         FileInfo newFile = fileService.uploadFile(file,userId);
-
+        Share share = Share.builder()
+                .fileId(newFile.getId())
+                .userId(newFile.getPubId())
+                .level(0L)
+                .build();
+        shareService.addShare(share);
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
     @ApiOperation(
@@ -184,7 +194,12 @@ public class FileController {
         String url = "/api/upload-to-pdf";
 
         FileInfo newFile = fileService.uploadFileToPDF(file,userId);
-
+        Share share = Share.builder()
+                .fileId(newFile.getId())
+                .userId(newFile.getPubId())
+                .level(0L)
+                .build();
+        shareService.addShare(share);
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
 
@@ -227,7 +242,7 @@ public class FileController {
                         "filename=\""+resource.getFilename()+"\"").body(resource);
     }
     @ApiOperation(
-            value = "다운로드",
+            value = "PDF다운로드",
             httpMethod = "GET",
             produces = "application/json",
             consumes = "application/json",

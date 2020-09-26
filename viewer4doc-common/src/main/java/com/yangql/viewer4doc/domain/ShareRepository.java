@@ -9,7 +9,9 @@ import java.util.Optional;
 
 public interface ShareRepository extends CrudRepository<Share,SharePK> {
     List<Share> findAllByUserId(Long userId);
+    List<Share> findAllByFileId(Long fileId);
     Optional<Share> findByFileId(Long fileId);
+
     Share save(Share share);
 
     @Modifying
