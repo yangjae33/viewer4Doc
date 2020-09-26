@@ -37,7 +37,7 @@ public class FileService {
 
     public FileInfo uploadFile(MultipartFile file,Long userId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        fileName = fileName.replaceAll(" ","_");
         if(file.isEmpty()){
             throw new UploadFileNotExistException();
         }
@@ -75,7 +75,7 @@ public class FileService {
     public FileInfo uploadFileToPDF(MultipartFile file,Long userId) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        fileName = fileName.replaceAll(" ","_");
         int pos = fileName.lastIndexOf(".");
         String ext = fileName.substring(pos+1);
         String newFilename = fileName.substring(0,pos)+".pdf";
@@ -142,6 +142,22 @@ public class FileService {
         } catch (MalformedURLException | FileNotFoundException e) {
             throw new FileNotFoundException("Could not read file");
         }
+    }
 
+    public Resource loadAsPdfResource(Long fileId) throws FileNotFoundException {
+        try{
+            FileInfo fileInfo = fileInfoRepository.findById(fileId).orElse(null);
+            Path file = Paths.get(System.getProperty("user.dir")+"/converts/"+fileInfo.getName());
+            Resource resource = new UrlResource(file.toUri());
+            if(resource.exists() || resource.isReadable()){
+                return resource;
+            }
+            else{
+                throw new FileNotFoundException(
+                        "Could not read file:" + fileInfo.getOrgName());
+            }
+        } catch (MalformedURLException | FileNotFoundException e) {
+            throw new FileNotFoundException("Could not read file");
+        }
     }
 }

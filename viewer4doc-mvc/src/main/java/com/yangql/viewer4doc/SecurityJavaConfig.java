@@ -32,7 +32,6 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter implements 
             "/webjars/**",
             "/h2-console",
             "/web/*"
-
     };
 
     @Override
