@@ -21,7 +21,6 @@ public class ShareService {
         return shareRepository.save(share);
     }
     public void updateShare(Share share){
-
         shareRepository.updateShare(share.getUserId(),share.getFileId(),share.getLevel());
         return;
     }
