@@ -78,14 +78,13 @@ public class ShareController {
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/shares")
     public ResponseEntity<?> updateShare(
-            @RequestBody ShareReq shareReq,
+            @RequestBody Share share,
             Authentication authentication
     ) throws URISyntaxException {
+        //TODO : ID를 직접 입력하면 안됨.
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
         String email = claims.get("email",String.class);
-
-        Share share = Share.builder().userId(userId).fileId(shareReq.getFileId()).level(shareReq.getLevel()).build();
 
         shareService.updateShare(share);
         String url = "/api/shares/"+share.getFileId();
