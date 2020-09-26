@@ -63,7 +63,7 @@ public class FileController {
             return "redirect:/";
         }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        fileName = fileName.replaceAll(" ","_");
         try{
             Path path = Paths.get(UPLOAD_DIR+fileName);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -90,9 +90,9 @@ public class FileController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
-    public ResponseEntity<?> uploadFileWithResponseJson(
+    public ResponseEntity<FileInfo> uploadFileWithResponseJson(
             Authentication authentication,
-            @RequestPart("file") MultipartFile file
+            @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -110,9 +110,9 @@ public class FileController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
-        FileInfo newfile = fileService.uploadFile(file,userId);
+        FileInfo newFile = fileService.uploadFile(file,userId);
 
-        return ResponseEntity.created(new URI(url)).body(newfile);
+        return ResponseEntity.created(new URI(url)).body(newFile);
     }
     @ApiOperation(
             value = "PDF파일로 변환",
@@ -154,7 +154,7 @@ public class FileController {
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
             Authentication authentication,
-            @RequestPart(value = "file",required = true) MultipartFile file
+            @RequestParam(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -183,7 +183,7 @@ public class FileController {
 
         String url = "/api/upload-to-pdf";
 
-        FileInfo newFile = fileService.uploadFileToPDF(file);
+        FileInfo newFile = fileService.uploadFileToPDF(file,userId);
 
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
@@ -219,6 +219,51 @@ public class FileController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
+        Resource resource = fileService.loadAsResource(fileId);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;" +
+                        "filename=\""+resource.getFilename()+"\"").body(resource);
+    }
+    @ApiOperation(
+            value = "다운로드",
+            httpMethod = "GET",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    @GetMapping("/api/pdf-download/{fileId}")
+    public ResponseEntity<Resource> downloadPdfFile(
+            Authentication authentication,
+            @PathVariable("fileId") Long fileId
+    ) throws FileNotFoundException {
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+
+        Resource resource = fileService.loadAsPdfResource(fileId);
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;" +
+                        "filename=\""+resource.getFilename()+"\"").body(resource);
+    }
+
+
+    @GetMapping("/web/download/{fileId}")
+    public ResponseEntity<Resource> webDownloadFile(
+
+            @PathVariable("fileId") Long fileId
+    ) throws FileNotFoundException {
         Resource resource = fileService.loadAsResource(fileId);
 
         return ResponseEntity

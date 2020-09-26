@@ -72,7 +72,7 @@ class FileControllerTest {
         FileInfo mockFile = FileInfo.builder()
                 .name("test.txt")
                 .link("*** AMAZON S3 Link ***")
-                .org_name("test.txt")
+                .orgName("test.txt")
                 .build();
 
         given(fileService.uploadFile(mockMultipartFile,30L)).willReturn(mockFile);
