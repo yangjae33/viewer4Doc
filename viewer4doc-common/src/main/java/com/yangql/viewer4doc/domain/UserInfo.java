@@ -18,18 +18,16 @@ public class UserInfo {
     private Long id;
 
     @Setter
-    private String name;
+    private String email;
 
     @Setter
-    private String email;
+    private String name;
 
     private String password;
 
     @Setter
     @NotNull
     private Long level;
-
-    private Long fileId;
 
     public String getPassword() {
         return password;
@@ -43,10 +41,5 @@ public class UserInfo {
     }
     public boolean isCorp(){
         return level>=100L;
-    }
-
-    public void setFileId(Long fileId){
-        this.level = 50L;
-        this.fileId = fileId;
     }
 }

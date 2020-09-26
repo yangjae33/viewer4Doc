@@ -90,9 +90,9 @@ public class FileController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
-    public ResponseEntity<?> uploadFileWithResponseJson(
+    public ResponseEntity<FileInfo> uploadFileWithResponseJson(
             Authentication authentication,
-            @RequestPart("file") MultipartFile file
+            @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -110,9 +110,9 @@ public class FileController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
-        FileInfo newfile = fileService.uploadFile(file,userId);
+        FileInfo newFile = fileService.uploadFile(file,userId);
 
-        return ResponseEntity.created(new URI(url)).body(newfile);
+        return ResponseEntity.created(new URI(url)).body(newFile);
     }
     @ApiOperation(
             value = "PDF파일로 변환",
@@ -154,7 +154,7 @@ public class FileController {
     @PostMapping("/api/upload-to-pdf")
     public ResponseEntity<?> uploadToPDF(
             Authentication authentication,
-            @RequestPart(value = "file",required = true) MultipartFile file
+            @RequestParam(value = "file",required = true) MultipartFile file
     ) throws IOException, URISyntaxException {
 
         String savePath = System.getProperty("user.dir") + "/uploads/";
@@ -183,7 +183,7 @@ public class FileController {
 
         String url = "/api/upload-to-pdf";
 
-        FileInfo newFile = fileService.uploadFileToPDF(file);
+        FileInfo newFile = fileService.uploadFileToPDF(file,userId);
 
         return ResponseEntity.created(new URI(url)).body(newFile);
     }

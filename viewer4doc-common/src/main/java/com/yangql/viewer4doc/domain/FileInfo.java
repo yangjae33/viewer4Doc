@@ -1,28 +1,42 @@
 package com.yangql.viewer4doc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class FileInfo {
     @Id
-    @Setter
     @GeneratedValue
     private Long id;
 
-    private String org_name;
-
     private String name;
+
+    private String orgName;
+
+    private Long fileSize;
+
+    private LocalDateTime createdTimeAt;
 
     private String link;
 
-    private Long pub_id;
+    private Long pubId;
+
+    private Long level;
+
+    @JsonIgnore
+    public boolean isActive(){
+        return level>0L;
+    }
 }

@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -58,17 +59,20 @@ public class FileService {
         Path path = Paths.get(UPLOAD_DIR);
         Files.copy(file.getInputStream(), path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
-        FileInfo newfile = FileInfo.builder()
+        FileInfo newFile = FileInfo.builder()
                 .name(pureFileName+".pdf")
                 .link(Paths.get(UPLOAD_DIR+"/"+fileName).normalize().toString())
-                .org_name(fileName)
-                .pub_id(userId)
+                .orgName(fileName)
+                .pubId(userId)
+                .createdTimeAt(LocalDateTime.now())
+                .fileSize(Math.round(file.getSize()*0.0009765625))//KB
+                .level(1L)
                 .build();
 
-        return fileInfoRepository.save(newfile);
+        return fileInfoRepository.save(newFile);
     }
 
-    public FileInfo uploadFileToPDF(MultipartFile file) throws IOException {
+    public FileInfo uploadFileToPDF(MultipartFile file,Long userId) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -113,7 +117,11 @@ public class FileService {
         FileInfo newFile = FileInfo.builder()
                 .name(newFilename)
                 .link(UPLOAD_DIR+newFilename)
-                .org_name(fileName)
+                .orgName(fileName)
+                .pubId(userId)
+                .createdTimeAt(LocalDateTime.now())
+                .fileSize(Math.round(file.getSize()*0.0009765625))//KB
+                .level(1L)
                 .build();
 
         return fileInfoRepository.save(newFile);
@@ -122,14 +130,14 @@ public class FileService {
     public Resource loadAsResource(Long fileId) throws FileNotFoundException {
         try{
             FileInfo fileInfo = fileInfoRepository.findById(fileId).orElse(null);
-            Path file = Paths.get(System.getProperty("user.dir")+"/uploads/"+fileInfo.getOrg_name());
+            Path file = Paths.get(System.getProperty("user.dir")+"/uploads/"+fileInfo.getOrgName());
             Resource resource = new UrlResource(file.toUri());
             if(resource.exists() || resource.isReadable()){
                 return resource;
             }
             else{
                 throw new FileNotFoundException(
-                        "Could not read file:" + fileInfo.getOrg_name());
+                        "Could not read file:" + fileInfo.getOrgName());
             }
         } catch (MalformedURLException | FileNotFoundException e) {
             throw new FileNotFoundException("Could not read file");
