@@ -2,8 +2,10 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.ShareFileResponse;
+import com.yangql.viewer4doc.domain.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,9 @@ import java.util.List;
 public class FileController {
     @Autowired
     FileService fileService;
+
+    @Autowired
+    ShareService shareService;
 
     @ApiOperation(
             value = "파일/공유 리스트",
@@ -129,5 +134,30 @@ public class FileController {
 
         List<ShareFileResponse> multiFileInfo = fileService.getSharedFiles(userId);
         return multiFileInfo;
+    }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @DeleteMapping("/delete/{fileId}")
+    public ResponseEntity<?> deleteFiles(
+            @PathVariable("fileId") Long fileId,
+            Authentication authentication
+    ){
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        String email = claims.get("email",String.class);
+        if(fileService.checkUserFile(userId,fileId) == false){
+            return ResponseEntity.badRequest().body("Unauthorized or Not exist");
+        }
+        fileService.deleteAllFiles(fileId);
+        shareService.deleteAllShares(fileId);
+
+        return ResponseEntity.ok().body("DELETED");
     }
 }

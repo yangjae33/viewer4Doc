@@ -28,4 +28,8 @@ public class ShareService {
     public List<Share> getShareListByFileId(Long fileId) {
         return shareRepository.findAllByFileId(fileId);
     }
+
+    public void deleteAllShares(Long fileId) {
+        shareRepository.deleteAllByFileId(fileId);
+    }
 }

@@ -17,4 +17,8 @@ public interface ShareRepository extends CrudRepository<Share,SharePK> {
     @Modifying
     @Query("UPDATE Share s SET s.level= :level where s.userId=:userId and s.fileId=:fileId")
     void updateShare(Long userId, Long fileId, Long level);
+
+    @Modifying
+    @Query("DELETE FROM Share s where s.fileId=:fileId")
+    void deleteAllByFileId(Long fileId);
 }
