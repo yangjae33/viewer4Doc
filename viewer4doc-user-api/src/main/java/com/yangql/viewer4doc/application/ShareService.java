@@ -1,13 +1,10 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileInfoRepository;
 import com.yangql.viewer4doc.domain.Share;
 import com.yangql.viewer4doc.domain.ShareRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
