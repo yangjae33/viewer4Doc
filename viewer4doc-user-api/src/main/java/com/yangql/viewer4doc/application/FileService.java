@@ -1,12 +1,10 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileInfoRepository;
-import com.yangql.viewer4doc.domain.Share;
-import com.yangql.viewer4doc.domain.ShareRepository;
+import com.yangql.viewer4doc.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -37,14 +35,20 @@ public class FileService {
 
         return myfileInfos;
     }
-    public List<FileInfo> getSharedFiles(Long id){
+    public List<ShareFileResponse> getSharedFiles(Long id){
         List<Share> shares = shareRepository.findAllByUserId(id);
-        List<FileInfo> sharedfileInfos = new ArrayList<>();
+        List<ShareFileResponse> sharedfileInfos = new ArrayList<>();
 
         for(int i = 0; i<shares.size(); i++){
             FileInfo newFile = fileInfoRepository.findById(shares.get(i).getFileId()).orElse(null);
+            Long scope = shares.get(i).getLevel();
+            ShareFileResponse fileAddedScope = ShareFileResponse.builder()
+                    .fileInfo(newFile)
+                    .level(scope)
+                    .build();
+
             if(newFile != null){
-                sharedfileInfos.add(newFile);
+                sharedfileInfos.add(fileAddedScope);
             }
         }
         return sharedfileInfos;

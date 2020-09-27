@@ -24,18 +24,12 @@ public class UserInfo {
     @Setter
     private String name;
 
-    @JsonIgnore
     private String password;
 
     @Setter
     @NotNull
     @JsonIgnore
     private Long level;
-
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
 
     @JsonIgnore
     public boolean isPublisher() {

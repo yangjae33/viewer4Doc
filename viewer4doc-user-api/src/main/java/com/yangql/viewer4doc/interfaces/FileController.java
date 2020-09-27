@@ -3,6 +3,7 @@ package com.yangql.viewer4doc.interfaces;
 import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.domain.FileInfo;
+import com.yangql.viewer4doc.domain.ShareFileResponse;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Api(value = "User for API")
@@ -118,14 +120,14 @@ public class FileController {
     })
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/sharedfiles")
-    public List<FileInfo> sharedFiles(
+    public List<ShareFileResponse> sharedFiles(
             Authentication authentication
     ){
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
         String email = claims.get("email",String.class);
 
-        List<FileInfo> multiFileInfo = fileService.getSharedFiles(userId);
+        List<ShareFileResponse> multiFileInfo = fileService.getSharedFiles(userId);
         return multiFileInfo;
     }
 }
