@@ -43,4 +43,9 @@ public class UserService {
         UserInfo userInfo = userRepository.findById(userId).orElse(null);
         return userInfo;
     }
+
+    public UserInfo getUserByEmail(String email) {
+        UserInfo userInfo = userRepository.findByEmail(email).orElse(null);
+        return userInfo;
+    }
 }

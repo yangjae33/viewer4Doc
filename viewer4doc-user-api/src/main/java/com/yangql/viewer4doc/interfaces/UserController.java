@@ -34,8 +34,6 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Existed Email"),
-            @ApiResponse(code = 401, message = "Not authenticated"),
-            @ApiResponse(code = 403, message = "Access Token error")
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/users")

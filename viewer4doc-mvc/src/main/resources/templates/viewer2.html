@@ -17,10 +17,10 @@
     <script type="text/javascript" th:src="@{https://code.jquery.com/jquery-3.2.1.min.js}"></script>
 <script type="text/javascript" th:src="@{https://hammerjs.github.io/dist/hammer.js}"></script>
 <script type="text/javascript" th:src="@{/pdfjs/web/viewer.js}"></script>
-    
+<script type="text/javascript" th:src="@{/pdfjs/web/zoomer.js}"></script>
 	
   <body tabindex="1" class="loadingInProgress">
-  	
+  	<p id="target-pdf" th:value="${pdfurl}"></p>
     <div id="outerContainer">
 		
       <div id="sidebarContainer">
@@ -369,9 +369,9 @@
 
     </div> <!-- outerContainer -->
     <div id="printContainer"></div>
-    
-    <script type="module" th:src="@{pdfjs/web/viewer.js}"></script>
-    <script type="text/javascript" th:src="@{pdfjs/web/zoomer.js}"></script>
+
+    <script type="module" th:src="@{/pdfjs/web/viewer.js}"></script>
+
     
   </body>
 </html>

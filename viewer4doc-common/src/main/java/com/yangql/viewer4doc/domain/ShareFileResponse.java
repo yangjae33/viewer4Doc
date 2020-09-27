@@ -1,13 +1,12 @@
 package com.yangql.viewer4doc.domain;
-
 import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShareReq {
-    private String email;
-    private Long fileId;
+@Builder
+public class ShareFileResponse {
+    private FileInfo fileInfo;
     private Long level;
 }

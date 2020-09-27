@@ -1,5 +1,7 @@
 package com.yangql.viewer4doc.domain;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -9,6 +11,7 @@ public interface UserRepository extends CrudRepository<UserInfo,Long> {
     List<UserInfo> findAll();
     Optional<UserInfo> findById(Long id);
     UserInfo save(UserInfo userInfo);
-    Optional<UserInfo> findByEmail(String email);
 
+    @Query("SELECT u FROM UserInfo u where u.email=:email")
+    Optional<UserInfo> findByEmail(String email);
 }

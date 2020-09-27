@@ -1771,7 +1771,9 @@ function webViewerInitialized() {
   let file;
   const queryString = document.location.search.substring(1);
   const params = (0, _ui_utils.parseQueryString)(queryString);
-  file = "file" in params ? params.file : _app_options.AppOptions.get("defaultUrl");
+  file = "file" in params ? params.file : document.getElementById("target-pdf").getAttribute("value");
+//  file = "file" in params ? params.file : _app_options.AppOptions.get("defaultUrl");
+  console.log("file : "+file.toString());
   validateFileURL(file);
   const fileInput = document.createElement("input");
   fileInput.id = appConfig.openFileInputName;
@@ -3490,13 +3492,16 @@ const OptionKind = {
   PREFERENCE: 0x80
 };
 exports.OptionKind = OptionKind;
+const target_str = document.getElementById("target-pdf");
 const defaultOptions = {
   cursorToolOnLoad: {
     value: 0,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   defaultUrl: {
-    value: "/pdfjs/web/compressed.tracemonkey-pldi-09.pdf",
+    //value: "/pdfjs/web/pdftest.pdf",
+    value: target_str,
+    //value: "/pdfjs/web/compressed.tracemonkey-pldi-09.pdf",
     kind: OptionKind.VIEWER
   },
   defaultZoomValue: {

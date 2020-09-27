@@ -49,16 +49,28 @@ public class ShareController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/shares")
     public ResponseEntity<?> addShare(
-            @RequestBody Share share,
+            @RequestBody ShareReq shareReq,
             Authentication authentication
     ) throws URISyntaxException {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
         String email = claims.get("email",String.class);
 
-        shareService.addShare(share);
-        String url = "/api/shares/"+share.getFileId();
+        UserInfo userInfo = userService.getUserByEmail(shareReq.getEmail());
+        //TODO : userInfo가 null
+        String url = "/api/shares/"+shareReq.getFileId();
+        if(userInfo == null){
+            return ResponseEntity.badRequest().body("User not Exist");
+        }
+        userId = userInfo.getId();
 
+        Share share = Share.builder()
+                .userId(userId)
+                .fileId(shareReq.getFileId())
+                .level(shareReq.getLevel())
+                .build();
+
+        shareService.addShare(share);
         return ResponseEntity.created(new URI(url)).body("CREATED");
     }
     @ApiOperation(
