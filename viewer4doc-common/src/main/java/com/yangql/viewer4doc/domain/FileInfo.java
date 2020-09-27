@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -27,7 +28,7 @@ public class FileInfo {
 
     private Long fileSize;
 
-    private LocalDateTime createdTimeAt;
+    private ZonedDateTime createdTimeAt;
 
     private String link;
 

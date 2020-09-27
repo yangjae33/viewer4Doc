@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.domain;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,8 @@ public interface FileInfoRepository extends CrudRepository<FileInfo,Long> {
 
     @Query("SELECT f FROM FileInfo f where f.pubId = :pubId")
     List<FileInfo> findAllByPubId(@Param("pubId") Long pubId);
+
+    @Modifying
+    @Query("DELETE FROM FileInfo f where f.id = :id")
+    void deleteAllById(@Param("id")Long id);
 }

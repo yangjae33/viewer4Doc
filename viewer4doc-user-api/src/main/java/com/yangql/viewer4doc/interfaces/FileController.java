@@ -1,7 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.ShareFileResponse;
 import io.jsonwebtoken.Claims;
@@ -10,20 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Api(value = "User for API")
@@ -33,6 +24,9 @@ import java.util.List;
 public class FileController {
     @Autowired
     FileService fileService;
+
+    @Autowired
+    ShareService shareService;
 
     @ApiOperation(
             value = "파일/공유 리스트",
@@ -129,5 +123,30 @@ public class FileController {
 
         List<ShareFileResponse> multiFileInfo = fileService.getSharedFiles(userId);
         return multiFileInfo;
+    }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @DeleteMapping("/delete/{fileId}")
+    public ResponseEntity<?> deleteFiles(
+            @PathVariable("fileId") Long fileId,
+            Authentication authentication
+    ){
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        String email = claims.get("email",String.class);
+        if(fileService.checkUserFile(userId,fileId) == false){
+            return ResponseEntity.badRequest().body("Unauthorized or Not exist");
+        }
+        fileService.deleteAllFiles(fileId);
+        shareService.deleteAllShares(fileId);
+
+        return ResponseEntity.ok().body("DELETED");
     }
 }

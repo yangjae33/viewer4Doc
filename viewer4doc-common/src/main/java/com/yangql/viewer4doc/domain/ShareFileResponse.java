@@ -9,4 +9,5 @@ import lombok.*;
 public class ShareFileResponse {
     private FileInfo fileInfo;
     private Long level;
+    private UserInfo userInfo;
 }

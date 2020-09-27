@@ -63,7 +63,7 @@ var updateLastPos = function (deltaX, deltaY) {
 };
 
 var translate = function (deltaX, deltaY) {
-  
+
   var newX = restrictRawPos(lastX + deltaX/scale,
                             Math.min(viewportWidth, curWidth), tagWidth);
   x = newX;
@@ -74,7 +74,7 @@ var translate = function (deltaX, deltaY) {
   y = newY;
   //tag.style.marginTop = Math.ceil(newY*scale) + 'px';
   tag.style.marginTop = Math.ceil(newY*scale) + 'px';
-  
+
 };
 
 var zoom = function (scaleBy) {
@@ -147,7 +147,7 @@ var zoomOut = function () {
 
 
   tag = document.getElementById('viewer');
-  container = tag.parentElement;
+  container = document.getElementById('viewerContainer');
   disableTagEventHandlers();
 
   tagWidth = tag.offsetWidth;
@@ -156,7 +156,7 @@ var zoomOut = function () {
   //tagHeight = tag.height;
   //tagWidth = tag.style.width;
   //tagHeight = tag.style.height;
-  
+
   viewportWidth = tag.offsetWidth;
   scale = viewportWidth/tagWidth;
   lastScale = scale;

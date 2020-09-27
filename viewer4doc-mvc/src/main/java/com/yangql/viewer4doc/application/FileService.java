@@ -3,9 +3,7 @@ package com.yangql.viewer4doc.application;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
 import com.yangql.viewer4doc.domain.Share;
-import com.yangql.viewer4doc.domain.ShareRepository;
 import com.yangql.viewer4doc.interfaces.FileController;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,7 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Service
 @Transactional
@@ -66,7 +65,7 @@ public class FileService {
                 .link(Paths.get(UPLOAD_DIR+"/"+fileName).normalize().toString())
                 .orgName(fileName)
                 .pubId(userId)
-                .createdTimeAt(LocalDateTime.now())
+                .createdTimeAt(ZonedDateTime.now(ZoneId.of("Asia/Seoul")))
                 .fileSize(Math.round(file.getSize()*0.0009765625))//KB
                 .level(1L)
                 .build();
@@ -126,7 +125,7 @@ public class FileService {
                 .link(UPLOAD_DIR+newFilename)
                 .orgName(fileName)
                 .pubId(userId)
-                .createdTimeAt(LocalDateTime.now())
+                .createdTimeAt(ZonedDateTime.now(ZoneId.of("Asia/Seoul")))
                 .fileSize(Math.round(file.getSize()*0.0009765625))//KB
                 .level(1L)
                 .build();
