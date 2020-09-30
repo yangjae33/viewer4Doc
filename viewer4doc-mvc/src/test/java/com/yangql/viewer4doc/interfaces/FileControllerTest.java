@@ -36,7 +36,7 @@ class FileControllerTest {
 
     @Test
     public void uploadFileOnWebPage() throws Exception {
-        String fileName = "test.txt";
+        String fileName = "test.pdf";
         File file = new File(FileController.UPLOAD_DIR+fileName);
         file.delete();
 

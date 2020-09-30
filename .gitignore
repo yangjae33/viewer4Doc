@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+hwptopdf/
 build/
 uploads/
 data/

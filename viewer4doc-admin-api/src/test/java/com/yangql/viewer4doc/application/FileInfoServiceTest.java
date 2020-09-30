@@ -35,7 +35,7 @@ class FileInfoServiceTest {
         List<FileInfo> fileInfos = new ArrayList<>();
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
         fileInfos.add(fileInfo);
@@ -46,7 +46,7 @@ class FileInfoServiceTest {
     public void addFile(){
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
     }
