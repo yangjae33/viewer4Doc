@@ -1,5 +1,7 @@
 package com.yangql.viewer4doc.application;
 
+import com.yangql.viewer4doc.domain.AdminFile;
+import com.yangql.viewer4doc.domain.AdminFileRepository;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,25 +24,25 @@ class FileInfoServiceTest {
     private FileService fileService;
 
     @Mock
-    private FileInfoRepository fileInfoRepository;
+    private AdminFileRepository adminFileRepository;
 
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
-        fileService = new FileService(fileInfoRepository);
+        fileService = new FileService(adminFileRepository);
     }
 
     private void mockReturnRepository() {
-        List<FileInfo> fileInfos = new ArrayList<>();
-        FileInfo fileInfo = FileInfo.builder()
+        List<AdminFile> adminFiles = new ArrayList<>();
+        AdminFile adminFile = AdminFile.builder()
                 .id(1L)
                 .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
-        fileInfos.add(fileInfo);
-        given(fileInfoRepository.findAll()).willReturn(fileInfos);
-        given(fileInfoRepository.findById(1L)).willReturn(Optional.of(fileInfo));
+        adminFiles.add(adminFile);
+        given(adminFileRepository.findAll()).willReturn(adminFiles);
+        given(adminFileRepository.findById(1L)).willReturn(Optional.of(adminFile));
     }
     @Test
     public void addFile(){
@@ -52,8 +54,8 @@ class FileInfoServiceTest {
     }
     @Test
     public void getFiles(){
-        List<FileInfo> fileInfos = fileService.getFiles();
-        FileInfo fileInfo = fileInfos.get(0);
-        assertThat(fileInfo.getId(),is(1L));
+        List<AdminFile> adminFiles = fileService.getFiles();
+        AdminFile adminFile = adminFiles.get(0);
+        assertThat(adminFile.getId(),is(1L));
     }
 }
