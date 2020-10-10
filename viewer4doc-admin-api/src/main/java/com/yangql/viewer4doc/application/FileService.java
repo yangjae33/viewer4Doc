@@ -38,6 +38,11 @@ public class FileService {
         return userInfo.getLevel()==100;
     }
 
-    public void deleteAllFiles(Long fileId) {
+    public String deleteAllFiles(Long fileId,Long level) {
+        if(!checkAdmin(level)){
+            return "Unauthorized";
+        }
+        fileInfoRepository.deleteAllById(fileId);
+        return "Deleted";
     }
 }

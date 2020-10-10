@@ -9,6 +9,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -19,7 +23,14 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-//    @Test
-//    public void delete(){
-//    }
+    @Test
+    public void deactivate() throws Exception {
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
+
+        given(userService.deactivateUser(1L)).willReturn("Deactivated");
+        mvc.perform(post("/admin/users/1")
+                .header("Authorization",":Bearer"+token))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Deactivated"));
+    }
 }

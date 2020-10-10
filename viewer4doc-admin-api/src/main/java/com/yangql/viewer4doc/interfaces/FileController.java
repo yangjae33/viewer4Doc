@@ -50,17 +50,17 @@ public class FileController {
 
     })
     @ResponseStatus(value = HttpStatus.OK)
-    @DeleteMapping("/delete/{fileId}")
+    @PostMapping("/files/{fileId}")
     public ResponseEntity<?> deleteFiles(
             @PathVariable("fileId") Long fileId,
             Authentication authentication
     ){
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
-        if(!fileService.checkAdmin(userId)){
-            return ResponseEntity.badRequest().body("Unauthorized");
-        }
-        fileService.deleteAllFiles(fileId);
+//        if(!fileService.checkAdmin(userId)){
+//            return ResponseEntity.badRequest().body("Unauthorized");
+//        }
+        fileService.deleteAllFiles(fileId,userId);
         //shareService.deleteAllShares(fileId);
 
         return ResponseEntity.ok().body("Deleted");

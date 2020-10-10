@@ -38,4 +38,9 @@ public class UserController {
         UserInfo userInfo = userService.getUser(id);
         return userInfo;
     }
+    @PostMapping("/users/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        String s = userService.deactivateUser(id);
+        return ResponseEntity.ok().body(s);
+    }
 }
