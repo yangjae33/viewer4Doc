@@ -1,6 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.Share;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,8 @@ class FileInfoControllerTest {
     @MockBean
     private FileService fileService;
 
+    @MockBean
+    private ShareService shareService;
     @Test
     public void list() throws Exception {
         List<FileInfo> fileInfos = new ArrayList<>();

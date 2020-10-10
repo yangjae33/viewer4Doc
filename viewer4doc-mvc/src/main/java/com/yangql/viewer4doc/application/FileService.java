@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -34,7 +35,7 @@ public class FileService {
     }
 
     public FileInfo uploadFile(MultipartFile file,Long userId) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         fileName = fileName.replaceAll(" ","_");
         if(file.isEmpty()){
             throw new UploadFileNotExistException();

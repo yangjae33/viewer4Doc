@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.domain.FileInfo;
@@ -8,12 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 
@@ -24,7 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @WebMvcTest(FileController.class)
 class FileControllerTest {
 
@@ -34,6 +37,8 @@ class FileControllerTest {
     @MockBean
     private FileService fileService;
 
+    @MockBean
+    private ShareService shareService;
     @Test
     public void uploadFileOnWebPage() throws Exception {
         String fileName = "test.pdf";
@@ -54,8 +59,8 @@ class FileControllerTest {
     }
     @Test
     public void uploadFileAPI() throws Exception {
+        //String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjMwLCJlbWFpbCI6InRlc3QxIn0.uVHzuqkAwnxdOcH9TMju1RcbbfeqVaVJ_y5fwVoCfeY";
-
         String fileName = "test.docx";
         File file = new File(FileController.UPLOAD_DIR+fileName);
         file.delete();
@@ -70,14 +75,15 @@ class FileControllerTest {
                         .contentType(MediaType.APPLICATION_JSON);
 
         FileInfo mockFile = FileInfo.builder()
-                .name("test.txt")
+                .name("test.pdf")
                 .link("*** AMAZON S3 Link ***")
-                .orgName("test.txt")
+                .orgName("test.docx")
                 .build();
 
         given(fileService.uploadFile(mockMultipartFile,30L)).willReturn(mockFile);
 
         mvc.perform(builder)
+                //.andExpect(redirectedUrl("/"));
                 .andExpect(status().isCreated());
 
         verify(fileService).uploadFile(mockMultipartFile,30L);

@@ -22,12 +22,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class FileController {
-    @Autowired
-    FileService fileService;
+    private FileService fileService;
 
-    @Autowired
-    ShareService shareService;
-
+    private ShareService shareService;
+    public FileController(FileService fileService,ShareService shareService){
+        this.fileService = fileService;
+        this.shareService = shareService;
+    }
     @ApiOperation(
             value = "파일/공유 리스트",
             notes = "로그인 시 받은 accessToken을 header에 입력(Bearer Token)",

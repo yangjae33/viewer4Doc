@@ -13,6 +13,10 @@ spring:
     check-template-location: true
     enabled: true
     encoding: UTF-8
+---
+jwt:
+  secret:
+    12345678901234567890123456789012
 
 ---
 

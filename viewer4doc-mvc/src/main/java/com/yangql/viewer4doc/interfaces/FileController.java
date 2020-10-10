@@ -40,11 +40,12 @@ public class FileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
     public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+
     @Autowired
     private FileService fileService;
 
     @Autowired
-    ShareService shareService;
+    private ShareService shareService;
 
     @GetMapping("/web/")
     public String homepage(){
@@ -98,7 +99,7 @@ public class FileController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
-    public ResponseEntity<FileInfo> uploadFileWithResponseJson(
+    public ResponseEntity<?> uploadFileWithResponseJson(
             Authentication authentication,
             @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
@@ -125,7 +126,7 @@ public class FileController {
                 .level(0L)
                 .build();
         shareService.addShare(share);
-        return ResponseEntity.created(new URI(url)).body(newFile);
+        return ResponseEntity.created(new URI(url)).body("Created");
     }
     @ApiOperation(
             value = "PDF파일로 변환",
