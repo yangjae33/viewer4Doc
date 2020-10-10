@@ -2,28 +2,47 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
+import com.yangql.viewer4doc.domain.UserInfo;
+import com.yangql.viewer4doc.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class FileService {
-    private static FileInfoRepository fileInfoRepository;
+    @Autowired
+    private FileInfoRepository fileInfoRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     public FileService(FileInfoRepository fileInfoRepository){
         this.fileInfoRepository = fileInfoRepository;
     }
-    public void addFile(FileInfo fileInfo){
-        fileInfoRepository.save(fileInfo);
-    }
 
     public List<FileInfo> getFiles() {
-        List<FileInfo> fileInfos = fileInfoRepository.findAll();
-        return fileInfos;
+        return fileInfoRepository.findAll();
     }
 
-
     public FileInfo getFile(Long id) {
-        FileInfo fileInfo = fileInfoRepository.findById(id).orElse(null);
-        return fileInfo;
+        return fileInfoRepository.findById(id).orElse(null);
+    }
+    public FileInfo addFile(FileInfo fileInfo){
+        return fileInfoRepository.save(fileInfo);
+    }
+
+    public boolean checkAdmin(Long userId) {
+        UserInfo userInfo = userRepository.findById(userId).orElse(null);
+        if(userInfo==null)
+            return false;
+        return userInfo.getLevel()==100;
+    }
+
+    public String deleteAllFiles(Long fileId,Long level) {
+        if(!checkAdmin(level)){
+            return "Unauthorized";
+        }
+        fileInfoRepository.deleteAllById(fileId);
+        return "Deleted";
     }
 }

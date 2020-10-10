@@ -25,8 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,11 +40,12 @@ public class FileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
     public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+
     @Autowired
     private FileService fileService;
 
     @Autowired
-    ShareService shareService;
+    private ShareService shareService;
 
     @GetMapping("/web/")
     public String homepage(){
@@ -95,7 +99,7 @@ public class FileController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/api/upload")
-    public ResponseEntity<FileInfo> uploadFileWithResponseJson(
+    public ResponseEntity<?> uploadFileWithResponseJson(
             Authentication authentication,
             @RequestParam("file") MultipartFile file
     ) throws IOException, URISyntaxException {
@@ -122,7 +126,7 @@ public class FileController {
                 .level(0L)
                 .build();
         shareService.addShare(share);
-        return ResponseEntity.created(new URI(url)).body(newFile);
+        return ResponseEntity.created(new URI(url)).body("Created");
     }
     @ApiOperation(
             value = "PDF파일로 변환",
@@ -230,16 +234,16 @@ public class FileController {
     public ResponseEntity<Resource> downloadFile(
             Authentication authentication,
             @PathVariable("fileId") Long fileId
-    ) throws FileNotFoundException {
+    ) throws IOException {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
         Resource resource = fileService.loadAsResource(fileId);
-
+        String filename = fileService.getFileName(fileId);
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;" +
-                        "filename=\""+resource.getFilename()+"\"").body(resource);
+                        "filename=\""+filename+"\"").body(resource);
     }
     @ApiOperation(
             value = "PDF다운로드",
@@ -261,16 +265,17 @@ public class FileController {
     public ResponseEntity<Resource> downloadPdfFile(
             Authentication authentication,
             @PathVariable("fileId") Long fileId
-    ) throws FileNotFoundException {
+    ) throws FileNotFoundException, UnsupportedEncodingException {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
 
         Resource resource = fileService.loadAsPdfResource(fileId);
+        String filename = fileService.getPdfFileName(fileId);
 
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;" +
-                        "filename=\""+resource.getFilename()+"\"").body(resource);
+                        "filename=\""+filename+"\"").body(resource);
     }
 
 

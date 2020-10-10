@@ -69,7 +69,6 @@ class SessionControllerTest {
                 .id(id)
                 .name(name)
                 .level(50L)
-                .fileId(369L)
                 .build();
 
         given(userService.authenticate(email,password)).willReturn(mockUserInfo);

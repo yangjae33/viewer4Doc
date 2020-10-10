@@ -26,13 +26,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ShareController {
-    @Autowired
+
     FileService fileService;
 
-    @Autowired
     ShareService shareService;
 
-    @Autowired
     UserService userService;
 
     @ApiOperation(

@@ -61,6 +61,7 @@ services:
       - ./viewer4doc-mvc/build/libs:/home/viewer4doc/libs
       - ./unoconv:/home/viewer4doc/unoconv
       - ./office:/home/viewer4doc/office
+      - ./hwptopdf:/home/viewer4doc/hwptopdf
     ports:
       - 8004:8080
     depends_on:

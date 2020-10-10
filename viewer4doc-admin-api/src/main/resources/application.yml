@@ -4,6 +4,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+---
+spring:
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+    check-template-location: true
+    enabled: true
+    encoding: UTF-8
+---
+jwt:
+  secret:
+    12345678901234567890123456789012
 
 ---
 

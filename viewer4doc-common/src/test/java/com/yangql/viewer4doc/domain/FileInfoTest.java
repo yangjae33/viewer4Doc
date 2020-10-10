@@ -8,7 +8,12 @@ import static org.hamcrest.core.Is.is;
 class FileInfoTest {
     @Test
     public void creation(){
-        FileInfo fileInfo = new FileInfo(1L,"org.pdf","new.pdf","a/b/c/d",1L);
+        FileInfo fileInfo = FileInfo.builder()
+                .id(1L)
+                .name("org.pdf")
+                .orgName("org.pdf")
+                .pubId(2L)
+                .build();
         assertThat(fileInfo.getId(),is(1L));
     }
 }

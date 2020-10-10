@@ -1,7 +1,8 @@
 package com.yangql.viewer4doc.application;
 
+import com.yangql.viewer4doc.domain.AdminFile;
+import com.yangql.viewer4doc.domain.AdminFileRepository;
 import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileInfoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,43 +18,43 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
 
-class FileInfoServiceTest {
+class AdminFileServiceTest {
 
-    private FileService fileService;
+    private AdminFileService adminFileService;
 
     @Mock
-    private FileInfoRepository fileInfoRepository;
+    private AdminFileRepository adminFileRepository;
 
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
-        fileService = new FileService(fileInfoRepository);
+        adminFileService = new AdminFileService(adminFileRepository);
     }
 
     private void mockReturnRepository() {
-        List<FileInfo> fileInfos = new ArrayList<>();
-        FileInfo fileInfo = FileInfo.builder()
+        List<AdminFile> adminFiles = new ArrayList<>();
+        AdminFile adminFile = AdminFile.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
-        fileInfos.add(fileInfo);
-        given(fileInfoRepository.findAll()).willReturn(fileInfos);
-        given(fileInfoRepository.findById(1L)).willReturn(Optional.of(fileInfo));
+        adminFiles.add(adminFile);
+        given(adminFileRepository.findAll()).willReturn(adminFiles);
+        given(adminFileRepository.findById(1L)).willReturn(Optional.of(adminFile));
     }
     @Test
     public void addFile(){
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
     }
     @Test
     public void getFiles(){
-        List<FileInfo> fileInfos = fileService.getFiles();
-        FileInfo fileInfo = fileInfos.get(0);
-        assertThat(fileInfo.getId(),is(1L));
+        List<AdminFile> adminFiles = adminFileService.getFiles();
+        AdminFile adminFile = adminFiles.get(0);
+        assertThat(adminFile.getId(),is(1L));
     }
 }

@@ -14,4 +14,8 @@ public interface UserRepository extends CrudRepository<UserInfo,Long> {
 
     @Query("SELECT u FROM UserInfo u where u.email=:email")
     Optional<UserInfo> findByEmail(String email);
+
+    @Modifying
+    @Query("UPDATE UserInfo u SET u.level=-1L where u.id=:id")
+    void deactivateUser(Long id);
 }

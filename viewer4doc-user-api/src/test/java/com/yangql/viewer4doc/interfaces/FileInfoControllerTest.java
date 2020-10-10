@@ -1,6 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.Share;
 import org.junit.jupiter.api.Test;
@@ -29,12 +30,14 @@ class FileInfoControllerTest {
     @MockBean
     private FileService fileService;
 
+    @MockBean
+    private ShareService shareService;
     @Test
     public void list() throws Exception {
         List<FileInfo> fileInfos = new ArrayList<>();
         fileInfos.add(FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .link("a/b/c/d")
                 .build()
@@ -51,7 +54,7 @@ class FileInfoControllerTest {
     public void detail() throws Exception {
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .link("new.pdf")
                 .name("new.pdf")
                 .build();
@@ -71,10 +74,10 @@ class FileInfoControllerTest {
 
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .link("new.pdf")
                 .name("new.pdf")
-                .pub_id(30L)
+                .pubId(30L)
                 .build();
 
         List<FileInfo> fileInfos = new ArrayList<>();

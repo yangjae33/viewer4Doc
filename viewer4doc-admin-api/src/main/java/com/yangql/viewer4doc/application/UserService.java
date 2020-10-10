@@ -27,4 +27,9 @@ public class UserService {
         UserInfo userInfo = userRepository.findById(id).orElse(null);
         return userInfo;
     }
+
+    public String deactivateUser(Long id) {
+        userRepository.deactivateUser(id);
+        return "Deactivated";
+    }
 }
