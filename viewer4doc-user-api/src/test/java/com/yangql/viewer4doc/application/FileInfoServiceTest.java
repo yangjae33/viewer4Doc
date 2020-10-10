@@ -41,7 +41,7 @@ class FileInfoServiceTest {
         List<FileInfo> fileInfos = new ArrayList<>();
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
         fileInfos.add(fileInfo);
@@ -52,7 +52,7 @@ class FileInfoServiceTest {
     public void addFile(){
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .build();
         fileService.addFile(fileInfo);
@@ -71,7 +71,7 @@ class FileInfoServiceTest {
                 .id(2L)
                 .link(" ")
                 .name(" ")
-                .pub_id(1L)
+                .pubId(1L)
                 .build();
         List<FileInfo> fileInfos = new ArrayList<>();
         fileInfos.add(fileInfo);
@@ -86,7 +86,7 @@ class FileInfoServiceTest {
                 .id(2L)
                 .link(" ")
                 .name(" ")
-                .pub_id(1L)
+                .pubId(1L)
                 .build();
 
         Share share = Share.builder()

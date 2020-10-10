@@ -1,38 +1,37 @@
 package com.yangql.viewer4doc.application;
 
+import com.yangql.viewer4doc.domain.AdminFile;
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
-import com.yangql.viewer4doc.domain.Share;
-import com.yangql.viewer4doc.domain.ShareRepository;
+import com.yangql.viewer4doc.domain.UserInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-class ShareServiceTest {
+class FileServiceTest {
+    private FileService fileService;
 
-    private ShareService shareService;
     @Mock
     private FileInfoRepository fileInfoRepository;
-
-    @Mock
-    private ShareRepository shareRepository;
 
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
-        shareService = new ShareService(shareRepository);
+        fileService = new FileService(fileInfoRepository);
     }
 
     private void mockReturnRepository() {
@@ -47,13 +46,25 @@ class ShareServiceTest {
         given(fileInfoRepository.findById(1L)).willReturn(Optional.of(fileInfo));
     }
     @Test
-    public void addShare(){
-        Share share = Share.builder()
-                .userId(1L)
-                .fileId(2L)
-                .level(1L)
+    public void fileList(){
+        List<FileInfo> fileInfos = fileService.getFiles();
+        assertThat(fileInfos.get(0).getId(),is(1L));
+        assertThat(fileInfos.get(0).getName(),is("new.pdf"));
+
+    }
+    @Test
+    public void fileDetail(){
+        FileInfo fileInfo = fileService.getFile(1L);
+        assertThat(fileInfo.getName(),is("new.pdf"));
+    }
+
+    @Test
+    public void createFile(){
+        FileInfo fileInfo = FileInfo.builder()
+                .id(1L)
+                .name("name")
                 .build();
-        shareService.addShare(share);
-        verify(shareRepository).save(any());
+        fileService.addFile(fileInfo);
+        verify(fileInfoRepository).save(any());
     }
 }

@@ -1,6 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
-import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.AdminFileService;
 import com.yangql.viewer4doc.domain.FileInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FileController.class)
-class FileInfoControllerTest {
+@WebMvcTest(AdminFileController.class)
+class AdminFileControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private FileService fileService;
+    private AdminFileService adminFileService;
 
     @Test
     public void list() throws Exception {
@@ -36,7 +35,6 @@ class FileInfoControllerTest {
                 .link("a/b/c/d")
                 .build()
         );
-        given(fileService.getFiles()).willReturn(fileInfos);
 
         mvc.perform(get("/admin/files"))
                 .andExpect(status().isOk())
@@ -48,11 +46,11 @@ class FileInfoControllerTest {
     public void detail() throws Exception {
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
+                .level(1L)
                 .orgName("org.pdf")
                 .link("new.pdf")
                 .name("new.pdf")
                 .build();
-        given(fileService.getFile(1L)).willReturn(fileInfo);
 
         mvc.perform(get("/admin/file/1"))
                 .andExpect(status().isOk())

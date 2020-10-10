@@ -34,7 +34,7 @@ class FileInfoControllerTest {
         List<FileInfo> fileInfos = new ArrayList<>();
         fileInfos.add(FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .name("new.pdf")
                 .link("a/b/c/d")
                 .build()
@@ -51,7 +51,7 @@ class FileInfoControllerTest {
     public void detail() throws Exception {
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .link("new.pdf")
                 .name("new.pdf")
                 .build();
@@ -71,10 +71,10 @@ class FileInfoControllerTest {
 
         FileInfo fileInfo = FileInfo.builder()
                 .id(1L)
-                .org_name("org.pdf")
+                .orgName("org.pdf")
                 .link("new.pdf")
                 .name("new.pdf")
-                .pub_id(30L)
+                .pubId(30L)
                 .build();
 
         List<FileInfo> fileInfos = new ArrayList<>();

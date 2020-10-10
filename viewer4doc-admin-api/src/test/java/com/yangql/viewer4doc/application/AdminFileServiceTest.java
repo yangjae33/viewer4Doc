@@ -3,7 +3,6 @@ package com.yangql.viewer4doc.application;
 import com.yangql.viewer4doc.domain.AdminFile;
 import com.yangql.viewer4doc.domain.AdminFileRepository;
 import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileInfoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -19,9 +18,9 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
 
-class FileInfoServiceTest {
+class AdminFileServiceTest {
 
-    private FileService fileService;
+    private AdminFileService adminFileService;
 
     @Mock
     private AdminFileRepository adminFileRepository;
@@ -30,7 +29,7 @@ class FileInfoServiceTest {
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
-        fileService = new FileService(adminFileRepository);
+        adminFileService = new AdminFileService(adminFileRepository);
     }
 
     private void mockReturnRepository() {
@@ -54,7 +53,7 @@ class FileInfoServiceTest {
     }
     @Test
     public void getFiles(){
-        List<AdminFile> adminFiles = fileService.getFiles();
+        List<AdminFile> adminFiles = adminFileService.getFiles();
         AdminFile adminFile = adminFiles.get(0);
         assertThat(adminFile.getId(),is(1L));
     }
