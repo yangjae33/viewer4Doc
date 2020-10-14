@@ -1,9 +1,8 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.GroupMemberService;
 import com.yangql.viewer4doc.application.GroupService;
-import com.yangql.viewer4doc.domain.GroupInfo;
-import com.yangql.viewer4doc.domain.GroupReq;
-import com.yangql.viewer4doc.domain.ShareReq;
+import com.yangql.viewer4doc.domain.*;
 import io.jsonwebtoken.Claims;
 import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin
@@ -23,6 +23,9 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private GroupMemberService groupMemberService;
+
     @PostMapping("/group")
     public ResponseEntity<?> createGroup(
             Authentication authentication,
@@ -31,6 +34,14 @@ public class GroupController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
         GroupInfo group = groupService.createGroup(userId,param.get("name"));
+        GroupMember gm = GroupMember.builder()
+                .active(1L)
+                .userId(userId)
+                .groupId(group.getId())
+                .level(100L)
+                .build();
+        groupMemberService.addGroupMember(group.getId(),gm);
+
         String url = "/admin/group/"+group.getId();
         return ResponseEntity.created(new URI(url)).body("Created");
     }
@@ -44,5 +55,27 @@ public class GroupController {
         GroupInfo group = groupService.getGroup(groupId);
 
         return ResponseEntity.ok().body(group);
+    }
+    @GetMapping("/group")
+    public ResponseEntity<?> getGroups(
+            Authentication authentication
+    ){
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        List<GroupInfo> groups = groupService.getGroups();
+
+        return ResponseEntity.ok().body(groups);
+    }
+    @DeleteMapping("/group/{groupId}")
+    public ResponseEntity<?> deleteGroup(
+            @PathVariable("groupId") Long groupId,
+            Authentication authentication
+    ) {
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        groupService.deleteGroup(groupId);
+        groupMemberService.deleteGroupMembers(groupId);
+
+        return ResponseEntity.ok().body("Deleted");
     }
 }

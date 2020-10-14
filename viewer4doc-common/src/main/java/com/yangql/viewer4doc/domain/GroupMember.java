@@ -24,4 +24,7 @@ public class GroupMember {
 
     @Setter
     private Long active;
+
+    @Setter
+    private Long level;
 }

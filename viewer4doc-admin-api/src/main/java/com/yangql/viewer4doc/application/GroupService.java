@@ -40,4 +40,12 @@ public class GroupService {
 
         return group;
     }
+    public List<GroupInfo> getGroups(){
+        List<GroupInfo> groups = groupRepository.findAll();
+        return groups;
+    }
+
+    public void deleteGroup(Long groupId) {
+        groupRepository.deleteAllById(groupId);
+    }
 }

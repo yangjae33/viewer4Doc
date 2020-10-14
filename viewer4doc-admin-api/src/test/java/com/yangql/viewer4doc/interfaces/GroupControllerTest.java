@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.GroupMemberService;
 import com.yangql.viewer4doc.application.GroupService;
 import com.yangql.viewer4doc.domain.GroupInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,8 @@ class GroupControllerTest {
 
     @MockBean
     private GroupService groupService;
+    @MockBean
+    private GroupMemberService groupMemberService;
     @BeforeEach
     public void setUp() throws Exception{
         initMocks(this);
