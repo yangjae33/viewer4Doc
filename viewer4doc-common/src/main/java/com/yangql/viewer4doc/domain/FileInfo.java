@@ -36,6 +36,8 @@ public class FileInfo {
 
     private Long level;
 
+    private Long groupId;
+
     @JsonIgnore
     public boolean isActive(){
         return level>0L;
