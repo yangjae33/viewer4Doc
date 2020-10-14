@@ -3,18 +3,18 @@ package com.yangql.viewer4doc.interfaces;
 import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.application.ShareService;
-import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.Share;
-import com.yangql.viewer4doc.domain.TestVo;
+import com.yangql.viewer4doc.domain.*;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -204,6 +204,64 @@ public class FileController {
                 .level(0L)
                 .build();
         shareService.addShare(share);
+        return ResponseEntity.created(new URI(url)).body(newFile);
+    }
+    @ApiOperation(
+            value = "그룹 업로드 및 PDF파일로 변환",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+    })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping("/api/upload-to-pdf/{groupId}")
+    public ResponseEntity<?> groupUploadToPDF(
+            Authentication authentication,
+            @PathVariable("groupId") Long groupId,
+            @RequestParam(value = "file",required = true) MultipartFile file
+    ) throws IOException, URISyntaxException {
+
+        //TODO : 그룹 매니저인지 확인
+
+        String savePath = System.getProperty("user.dir") + "/uploads/";
+
+        if (!new File(savePath).exists()) {
+            try{
+                new File(savePath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+        String convertPath = System.getProperty("user.dir") + "/converts/";
+
+        if (!new File(convertPath).exists()) {
+            try{
+                new File(convertPath).mkdir();
+            }
+            catch(Exception e){
+                e.getStackTrace();
+            }
+        }
+
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+
+        String url = "/api/upload-to-pdf";
+
+        FileInfo newFile = fileService.uploadFileToPDF(file,userId);
+        GroupFile gf = GroupFile.builder()
+                .fileId(newFile.getId())
+                .groupId(groupId)
+                .build();
+        fileService.addGroupShare(gf);
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
 

@@ -1,8 +1,6 @@
 package com.yangql.viewer4doc.application;
 
-import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.FileInfoRepository;
-import com.yangql.viewer4doc.domain.Share;
+import com.yangql.viewer4doc.domain.*;
 import com.yangql.viewer4doc.interfaces.FileController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -28,10 +26,11 @@ public class FileService {
 
     public final static String UPLOAD_DIR = FileController.UPLOAD_DIR;
     FileInfoRepository fileInfoRepository;
-
+    GroupFileRepository groupFileRepository;
     @Autowired
-    public FileService(FileInfoRepository fileInfoRepository){
+    public FileService(FileInfoRepository fileInfoRepository,GroupFileRepository groupFileRepository){
         this.fileInfoRepository = fileInfoRepository;
+        this.groupFileRepository = groupFileRepository;
     }
 
     public FileInfo uploadFile(MultipartFile file,Long userId) throws IOException {
@@ -249,5 +248,9 @@ public class FileService {
     }
     public String getPdfFileName(Long fileId) {
         return fileInfoRepository.findById(fileId).orElse(null).getName();
+    }
+
+    public GroupFile addGroupShare(GroupFile gf) {
+        return groupFileRepository.save(gf);
     }
 }

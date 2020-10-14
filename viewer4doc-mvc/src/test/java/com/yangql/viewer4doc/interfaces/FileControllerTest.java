@@ -4,6 +4,7 @@ import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.FileService;
 import com.yangql.viewer4doc.domain.FileInfo;
+import com.yangql.viewer4doc.domain.GroupMemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ class FileControllerTest {
 
     @MockBean
     private ShareService shareService;
+
     @Test
     public void uploadFileOnWebPage() throws Exception {
         String fileName = "test.pdf";

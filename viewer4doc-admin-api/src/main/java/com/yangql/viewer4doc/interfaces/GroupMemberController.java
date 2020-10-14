@@ -5,7 +5,11 @@ import com.yangql.viewer4doc.application.GroupService;
 import com.yangql.viewer4doc.domain.GroupMember;
 import com.yangql.viewer4doc.domain.GroupReq;
 import io.jsonwebtoken.Claims;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,6 +28,23 @@ public class GroupMemberController {
     @Autowired
     private GroupMemberService groupMemberService;
 
+
+    @ApiOperation(
+            value = "그룹 멤버 추가 ",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+
+    })
+    @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/group/{groupId}/member")
     public ResponseEntity<?> inviteGroupMember(
             @RequestBody List<Long> targetId,

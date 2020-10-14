@@ -7,16 +7,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface GroupMemberRepository extends CrudRepository<GroupMember,Long> {
-    List<GroupMember> findAllByGroupId(Long groupId);
-
-    void deleteById(Long id);
-
-    GroupMember save(GroupMember groupMember);
+public interface GroupFileRepository extends CrudRepository<GroupFile,Long> {
+    List<GroupFile> findAll();
+    Optional<GroupFile> findById(Long id);
+    GroupFile save(GroupFile group);
+    List<GroupFile> findAllByGroupId(Long groupId);
 
     @Modifying
-    @Query("DELETE FROM GroupMember gm WHERE gm.groupId=:groupId")
-    void deleteAllByGroupId(@Param("groupId")Long groupId);
+    @Query("DELETE FROM GroupFile g where g.id = :id")
+    void deleteAllById(@Param("id")Long id);
+
 }

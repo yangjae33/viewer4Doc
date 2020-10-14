@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.FileInfo;
 import com.yangql.viewer4doc.domain.FileInfoRepository;
+import com.yangql.viewer4doc.domain.GroupFileRepository;
 import com.yangql.viewer4doc.interfaces.FileController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +29,13 @@ class FileServiceTest {
     @Mock
     private FileInfoRepository fileInfoRepository;
 
+    @Mock
+    private GroupFileRepository groupFileRepository;
+
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        fileService = new FileService(fileInfoRepository);
+        fileService = new FileService(fileInfoRepository,groupFileRepository);
     }
     @Test
     public void upload() throws Exception {
