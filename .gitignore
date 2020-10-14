@@ -6,6 +6,7 @@ uploads/
 data/
 converts/
 office/
+**/static/pdfjs/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
