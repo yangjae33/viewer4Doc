@@ -50,7 +50,7 @@ class FileControllerTest {
         fileInfos.add(fileInfo);
 
         given(fileService.getFiles()).willReturn(fileInfos);
-        mvc.perform(get("/files"))
+        mvc.perform(get("/admin/files"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1")
@@ -64,7 +64,7 @@ class FileControllerTest {
                 .build();
         given(fileService.addFile(fileInfo)).willReturn(fileInfo);
 
-        mvc.perform(post("/files")
+        mvc.perform(post("/admin/files")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"name\":\"name\"}"))
                 .andExpect(status().isCreated())
@@ -75,7 +75,7 @@ class FileControllerTest {
         //admin token
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
         given(fileService.deleteAllFiles(1L,100L)).willReturn("Deleted");
-        mvc.perform(post("/files/1")
+        mvc.perform(post("/admin/files/1")
         .header("Authorization",":Bearer"+token))
                 .andExpect(status().isOk());
     }
@@ -84,7 +84,7 @@ class FileControllerTest {
         //admin token
         String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
         given(fileService.deleteAllFiles(1L,99L)).willReturn("Deleted");
-        mvc.perform(post("/files/1")
+        mvc.perform(post("/admin/files/1")
                 .header("Authorization",":Bearer"+token))
                 .andExpect(status().isOk());
     }

@@ -28,6 +28,7 @@ import java.util.List;
 
 @CrossOrigin
 @Controller
+@RequestMapping("/group")
 public class AdminFileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
@@ -110,7 +111,7 @@ public class AdminFileController {
                         "filename=\""+resource.getFilename()+"\"").body(resource);
     }
 
-    @GetMapping("/admin/files")
+    @GetMapping("/files")
     public List<FileInfo> getFilesAPI(
 
     ){
