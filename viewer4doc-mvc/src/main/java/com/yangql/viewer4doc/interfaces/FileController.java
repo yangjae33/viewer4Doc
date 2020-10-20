@@ -256,7 +256,7 @@ public class FileController {
 
         String url = "/api/upload-to-pdf";
 
-        FileInfo newFile = fileService.uploadFileToPDF(file,userId);
+        FileInfo newFile = fileService.uploadGroupFileToPDF(file,userId,groupId);
         GroupFile gf = GroupFile.builder()
                 .fileId(newFile.getId())
                 .groupId(groupId)
