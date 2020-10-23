@@ -20,5 +20,4 @@ public class GroupFile {
     private Long groupId;
 
     private Long fileId;
-
 }

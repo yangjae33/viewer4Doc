@@ -12,12 +12,13 @@ import java.util.List;
 
 @Service
 public class GroupFileService {
-    @Autowired
     GroupFileRepository groupFileRepository;
-
-    @Autowired
     FileInfoRepository fileInfoRepository;
 
+    GroupFileService(GroupFileRepository groupFileRepository,FileInfoRepository fileInfoRepository){
+        this.groupFileRepository = groupFileRepository;
+        this.fileInfoRepository = fileInfoRepository;
+    }
     public List<FileInfo> getGroupFiles(Long groupId) {
         List<GroupFile> groupFiles = groupFileRepository.findAllByGroupId(groupId);
         List<FileInfo> resFiles = new ArrayList<>();

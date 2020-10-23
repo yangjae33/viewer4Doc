@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/bootstrap.css" th:href="@{/bootstrap.min.css}"/>
+    <!--    <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>-->
+    <!--    <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>-->
+    <title>Viewer4Doc UserList</title>
+    <style>
+        .formDiv{
+            display:flex;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Viewer4Doc</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="users">Users
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="groups">Groups</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="files">Files</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="shares">Shares</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<div>
+    <table id = "userTable"class="table table-hover">
+        <thead>
+        <tr class="table-secondary">
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Level</th>
+            <th>Password</th>
+            <th>Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:if="${user.id}">
+                <a th:href="'users/'+${user.id}" th:text="${user.id}"></a>
+            </td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.level}"></td>
+            <td th:text="${user.password}"></td>
+            <td>
+                <div class="formDiv">
+                <form class="form-inline my-2 my-lg-0" th:action="@{/view/users/delete}" method="post">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Delete</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" th:action="@{/view/users/edit}" th:object="${userInfo}"method="post">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Edit</button>
+                </form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <form class="form-inline my-2 my-lg-0" th:action="@{/view/users}" th:object="${userInfo}" method="post">
+                <td>-</td>
+                <td><input id="username" name="name" th:field="*{name}"></td>
+                <td><input id="email" name="email" th:field="*{email}"></td>
+                <td><input id="level" name="level" th:field="*{level}"></td>
+                <td><input id="password" name="password" th:field="*{password}"></td>
+                <td><button class="btn btn-secondary my-2 my-sm-0" type="submit">Create</button></td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

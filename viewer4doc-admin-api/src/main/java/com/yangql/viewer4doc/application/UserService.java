@@ -56,6 +56,21 @@ public class UserService {
                 .build();
         return userRepository.save(userInfo);
     }
+    public UserInfo registerUserAddLevel(String email, String name, String password , Long level){
+        Optional<UserInfo> existed = userRepository.findByEmail(email);
+        if(existed.isPresent()){
+            throw new EmailExistedException(email);
+        }
+        String encodedPassword = passwordEncoder.encode(password);
+
+        UserInfo userInfo = UserInfo.builder()
+                .email(email)
+                .name(name)
+                .password(encodedPassword)
+                .level(level)
+                .build();
+        return userRepository.save(userInfo);
+    }
     public UserInfo getUserById(Long userId){
         UserInfo userInfo = userRepository.findById(userId).orElse(null);
         return userInfo;

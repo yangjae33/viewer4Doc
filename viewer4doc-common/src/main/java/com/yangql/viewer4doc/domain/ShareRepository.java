@@ -11,7 +11,7 @@ public interface ShareRepository extends CrudRepository<Share,SharePK> {
     List<Share> findAllByUserId(Long userId);
     List<Share> findAllByFileId(Long fileId);
     Optional<Share> findByFileId(Long fileId);
-
+    List<Share> findAll();
     Share save(Share share);
 
     @Modifying

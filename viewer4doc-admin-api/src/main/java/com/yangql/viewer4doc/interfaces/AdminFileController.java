@@ -1,10 +1,8 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.google.common.net.HttpHeaders;
-import com.yangql.viewer4doc.application.AdminFileService;
-import com.yangql.viewer4doc.domain.AdminFile;
-import com.yangql.viewer4doc.domain.FileInfo;
-import com.yangql.viewer4doc.domain.TestVo;
+import com.yangql.viewer4doc.application.*;
+import com.yangql.viewer4doc.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +21,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.rmi.MarshalledObject;
 import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
 @Controller
-@RequestMapping("/group")
+@RequestMapping("/view")
 public class AdminFileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
@@ -36,11 +35,33 @@ public class AdminFileController {
     @Autowired
     private AdminFileService adminFileService;
 
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ShareService shareService;
+
+    @Autowired
+    private GroupService groupService;
+
     @GetMapping("/")
     public ModelAndView homepage(){
         List<AdminFile> adminFileList = adminFileService.getFiles();
         ModelAndView mv = new ModelAndView("index.html");
         mv.addObject("fileList",adminFileList);
+        return mv;
+    }
+    @GetMapping("")
+    public ModelAndView mainPage(){
+        ModelAndView mv = new ModelAndView("admin/index.html");
+        return mv;
+    }
+    @GetMapping("/home")
+    public ModelAndView homePage(){
+        ModelAndView mv = new ModelAndView("admin/home.html");
         return mv;
     }
     @GetMapping("/class")
@@ -89,7 +110,7 @@ public class AdminFileController {
                 .build();
         adminFileService.addFile(adminFile);
 
-        return "redirect:/";
+        return "redirect:/view/files";
     }
 
     @GetMapping("/web/thymeleaf")
@@ -112,11 +133,77 @@ public class AdminFileController {
     }
 
     @GetMapping("/files")
-    public List<FileInfo> getFilesAPI(
+    public ModelAndView getFilesAPI(
 
     ){
-        List<FileInfo> fileInfos = new ArrayList<>();
-
-        return fileInfos;
+        List<FileInfo> fileList = fileService.getFiles();
+        ModelAndView mv = new ModelAndView("admin/fileList.html");
+        mv.addObject("fileList",fileList);
+        return mv;
     }
+    @GetMapping("/users")
+    public ModelAndView getUsersAPI(
+        ModelAndView m
+    ){
+        m.setViewName("admin/userList.html");
+        List<UserInfo> userList = userService.getUsers();
+        //ModelAndView mv = new ModelAndView("admin/userList.html");
+        m.addObject("userList",userList);
+        UserInfo u = UserInfo.builder()
+                .email("")
+                .name("")
+                .password("")
+                .build();
+        m.addObject("userInfo",u);
+        return m;
+    }
+    @PostMapping("/users")
+    public String addUserAPI(
+            @RequestParam("email") String email,
+            @RequestParam("name") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("level") Long level,
+            ModelAndView m
+    ){
+        UserInfo u = userService.registerUserAddLevel(email,userName,password,level);
+        m.addObject("userInfo",u);
+        return "redirect:/view/users";
+    }
+    @PostMapping("/users/delete")
+    public String deleteUserAPI(
+            @RequestParam("id") Long id,
+            ModelAndView m
+    ){
+        userService.deactivateUser(id);
+
+        return "redirect:/view/users";
+    }
+    @GetMapping("/users/{id}")
+    public ModelAndView getUserAPI(
+            @PathVariable("id") Long id
+    ){
+        UserInfo userInfo = userService.getUser(id);
+        ModelAndView mv = new ModelAndView("admin/userDetail.html");
+        mv.addObject("userInfo",userInfo);
+        return mv;
+    }
+    @GetMapping("/shares")
+    public ModelAndView getSharesAPI(
+
+    ){
+        List<Share> shareList = shareService.getShares();
+        ModelAndView mv = new ModelAndView("admin/shareList.html");
+        mv.addObject("shareList",shareList);
+        return mv;
+    }
+    @GetMapping("/groups")
+    public ModelAndView getGroupsAPI(
+
+    ){
+        List<GroupInfo> groupList = groupService.getGroups();
+        ModelAndView mv = new ModelAndView("admin/groupList.html");
+        mv.addObject("groupList",groupList);
+        return mv;
+    }
+
 }
