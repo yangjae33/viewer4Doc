@@ -6,6 +6,11 @@
     <!--    <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>-->
     <!--    <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>-->
     <title>Viewer4Doc UserList</title>
+    <style>
+        .formDiv{
+            display:flex;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -55,6 +60,8 @@
             <th>Name</th>
             <th>Email</th>
             <th>Level</th>
+            <th>Password</th>
+            <th>Remarks</th>
         </tr>
         </thead>
         <tbody>
@@ -65,7 +72,27 @@
             <td th:text="${user.name}"></td>
             <td th:text="${user.email}"></td>
             <td th:text="${user.level}"></td>
-
+            <td th:text="${user.password}"></td>
+            <td>
+                <div class="formDiv">
+                <form class="form-inline my-2 my-lg-0" th:action="@{/view/users/delete}" method="post">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Delete</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" th:action="@{/view/users/edit}" th:object="${userInfo}"method="post">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Edit</button>
+                </form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <form class="form-inline my-2 my-lg-0" th:action="@{/view/users}" th:object="${userInfo}" method="post">
+                <td>-</td>
+                <td><input id="username" name="name" th:field="*{name}"></td>
+                <td><input id="email" name="email" th:field="*{email}"></td>
+                <td><input id="level" name="level" th:field="*{level}"></td>
+                <td><input id="password" name="password" th:field="*{password}"></td>
+                <td><button class="btn btn-secondary my-2 my-sm-0" type="submit">Create</button></td>
+            </form>
         </tr>
         </tbody>
     </table>

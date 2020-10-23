@@ -143,12 +143,40 @@ public class AdminFileController {
     }
     @GetMapping("/users")
     public ModelAndView getUsersAPI(
-
+        ModelAndView m
     ){
+        m.setViewName("admin/userList.html");
         List<UserInfo> userList = userService.getUsers();
-        ModelAndView mv = new ModelAndView("admin/userList.html");
-        mv.addObject("userList",userList);
-        return mv;
+        //ModelAndView mv = new ModelAndView("admin/userList.html");
+        m.addObject("userList",userList);
+        UserInfo u = UserInfo.builder()
+                .email("")
+                .name("")
+                .password("")
+                .build();
+        m.addObject("userInfo",u);
+        return m;
+    }
+    @PostMapping("/users")
+    public String addUserAPI(
+            @RequestParam("email") String email,
+            @RequestParam("name") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("level") Long level,
+            ModelAndView m
+    ){
+        UserInfo u = userService.registerUserAddLevel(email,userName,password,level);
+        m.addObject("userInfo",u);
+        return "redirect:/view/users";
+    }
+    @PostMapping("/users/delete")
+    public String deleteUserAPI(
+            @RequestParam("id") Long id,
+            ModelAndView m
+    ){
+        userService.deactivateUser(id);
+
+        return "redirect:/view/users";
     }
     @GetMapping("/users/{id}")
     public ModelAndView getUserAPI(
