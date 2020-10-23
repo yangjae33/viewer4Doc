@@ -31,7 +31,7 @@ import java.util.List;
 public class AdminFileController {
 
     //public final static String UPLOAD_DIR = "/Users/mac/Desktop/uploads/";
-    public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/adminfiles/";
+    public final static String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
     @Autowired
     private AdminFileService adminFileService;
 
@@ -81,7 +81,7 @@ public class AdminFileController {
     public String uploadFile(
             @RequestPart("file") MultipartFile file, RedirectAttributes attributes
     ) throws IOException {
-        String savePath = System.getProperty("user.dir") + "/adminfiles/";
+        String savePath = System.getProperty("user.dir") + "/uploads/";
 
         if (!new File(savePath).exists()) {
             try{
@@ -94,7 +94,7 @@ public class AdminFileController {
 
         if(file.isEmpty()){
             attributes.addFlashAttribute("message","no file to upload");
-            return "redirect:/";
+            return "redirect:/view/files";
         }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         fileName = fileName.replaceAll(" ","_");
@@ -105,10 +105,10 @@ public class AdminFileController {
             e.printStackTrace();
         }
         attributes.addFlashAttribute("message","file uploaded successfully");
-        AdminFile adminFile = AdminFile.builder()
+        FileInfo fileInfo = FileInfo.builder()
                 .name(fileName)
                 .build();
-        adminFileService.addFile(adminFile);
+        fileService.addFile(fileInfo);
 
         return "redirect:/view/files";
     }
