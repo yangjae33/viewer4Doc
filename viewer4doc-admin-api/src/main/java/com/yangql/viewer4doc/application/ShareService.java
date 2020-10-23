@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.Share;
 import com.yangql.viewer4doc.domain.ShareRepository;
+import com.yangql.viewer4doc.domain.UserInfo;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,5 +29,10 @@ public class ShareService {
 
     public void deleteAllShares(Long fileId) {
         shareRepository.deleteAllByFileId(fileId);
+    }
+
+    public List<Share> getShares() {
+        List<Share> shares = shareRepository.findAll();
+        return shares;
     }
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/bootstrap.css" th:href="@{/bootstrap.min.css}"/>
+    <!--    <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>-->
+    <!--    <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>-->
+    <title>Viewer4Doc ShareList</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Viewer4Doc</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="users">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="groups">Groups</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="files">Files</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="shares">Shares
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<div>
+    <table id = "ShareTable"class="table table-hover">
+        <thead>
+        <tr class="table-secondary">
+            <th>User ID</th>
+            <th>File ID</th>
+            <th>Level</th>
+            <th>Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="share : ${shareList}">
+            <td th:if="${share.userId}">
+                <a th:href="'users/'+${share.userId}" th:text="${share.userId}"></a>
+            </td>
+            <td th:if="${share.fileId}">
+                <a th:href="'files/'+${share.fileId}" th:text="${share.fileId}"></a>
+            </td>
+            <td th:text="${share.level}"></td>
+            <td>
+                <form class="form-inline my-2 my-lg-0">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Edit</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
