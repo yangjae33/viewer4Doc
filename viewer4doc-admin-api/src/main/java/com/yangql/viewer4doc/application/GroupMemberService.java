@@ -38,4 +38,8 @@ public class GroupMemberService {
     public void deleteGroupMembers(Long groupId) {
         groupMemberRepository.deleteAllByGroupId(groupId);
     }
+
+    public void deleteGroupMember(Long tuserId) {
+        groupMemberRepository.deleteBy
+    }
 }

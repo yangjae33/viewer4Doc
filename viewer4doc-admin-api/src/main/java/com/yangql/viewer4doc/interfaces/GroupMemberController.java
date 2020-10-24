@@ -67,4 +67,38 @@ public class GroupMemberController {
         String url = "/admin/"+groupId+"/member";
         return ResponseEntity.created(new URI(url)).body("Created");
     }
+
+    @ApiOperation(
+            value = "그룹 가입 ",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping("/group/{groupId}/join")
+    public ResponseEntity<?> joinGroup(
+            @PathVariable Long groupId,
+            Authentication authentication
+    ) throws URISyntaxException {
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        GroupMember groupMember = GroupMember.builder()
+                .groupId(groupId)
+                .level(1L)
+                .userId(userId)
+                .active(1L)
+                .build();
+        groupMemberService.addGroupMember(groupId,groupMember);
+        String url = "/admin/"+groupId+"/join";
+        return ResponseEntity.created(new URI(url)).body("Created");
+    }
 }
