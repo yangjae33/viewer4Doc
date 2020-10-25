@@ -28,7 +28,6 @@ public class UserInfo {
 
     @Setter
     @NotNull
-    @JsonIgnore
     private Long level;
 
     @JsonIgnore
