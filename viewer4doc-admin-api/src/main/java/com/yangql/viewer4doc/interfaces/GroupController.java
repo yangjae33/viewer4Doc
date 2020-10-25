@@ -58,6 +58,7 @@ public class GroupController {
                 .active(1L)
                 .userId(userId)
                 .groupId(group.getId())
+
                 .level(100L)
                 .build();
         groupMemberService.addGroupMember(group.getId(), gm);

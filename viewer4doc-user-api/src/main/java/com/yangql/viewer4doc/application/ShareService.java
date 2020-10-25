@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ShareService {
-    private static ShareRepository shareRepository;
+    private ShareRepository shareRepository;
     public ShareService(ShareRepository shareRepository){
         this.shareRepository = shareRepository;
     }

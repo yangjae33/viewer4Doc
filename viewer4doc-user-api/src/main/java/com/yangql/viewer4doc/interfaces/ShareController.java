@@ -27,11 +27,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class ShareController {
 
-    FileService fileService;
+    @Autowired
+    private FileService fileService;
 
-    ShareService shareService;
+    @Autowired
+    private ShareService shareService;
 
-    UserService userService;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(
             value = "파일 권한 추가",
