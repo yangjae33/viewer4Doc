@@ -3,6 +3,7 @@ package com.yangql.viewer4doc.interfaces;
 import com.yangql.viewer4doc.application.GroupMemberService;
 import com.yangql.viewer4doc.application.GroupService;
 import com.yangql.viewer4doc.domain.GroupMember;
+import com.yangql.viewer4doc.domain.GroupMemberReq;
 import com.yangql.viewer4doc.domain.GroupReq;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
@@ -100,5 +101,33 @@ public class GroupMemberController {
         groupMemberService.addGroupMember(groupId,groupMember);
         String url = "/admin/"+groupId+"/join";
         return ResponseEntity.created(new URI(url)).body("Created");
+    }
+    @ApiOperation(
+            value = "그룹 멤버 삭제 ",
+            httpMethod = "POST",
+            produces = "application/json",
+            consumes = "application/json",
+            protocols = "http",
+            responseHeaders = {}
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 401, message = "Not authenticated"),
+            @ApiResponse(code = 403, message = "Access Token error")
+
+    })
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping("/group/member/drop")
+    public ResponseEntity<?> kickGroupMember(
+            @RequestBody GroupMemberReq groupMemberReq,
+            Authentication authentication
+    ) {
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        Long tuserId = groupMemberReq.getUserId();
+        Long groupId = groupMemberReq.getGroupId();
+        groupMemberService.deleteGroupMemberForKick(groupId,tuserId);
+        return ResponseEntity.ok().body("Deleted");
     }
 }

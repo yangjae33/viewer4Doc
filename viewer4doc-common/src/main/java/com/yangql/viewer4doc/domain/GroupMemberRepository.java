@@ -19,4 +19,12 @@ public interface GroupMemberRepository extends CrudRepository<GroupMember,Long> 
     @Modifying
     @Query("DELETE FROM GroupMember gm WHERE gm.groupId=:groupId")
     void deleteAllByGroupId(@Param("groupId")Long groupId);
+
+    @Modifying
+    @Query("DELETE FROM GroupMember gm WHERE gm.userId=:userId")
+    void deleteAllByUserId(@Param("userId")Long userId);
+
+    @Modifying
+    @Query("DELETE FROM GroupMember gm WHERE gm.userId=:userId and gm.groupId=:groupId")
+    void deleteByGroupIdandUserId(@Param("groupId")Long groupId, @Param("userId")Long userId);
 }

@@ -39,7 +39,9 @@ public class GroupMemberService {
         groupMemberRepository.deleteAllByGroupId(groupId);
     }
 
-    public void deleteGroupMember(Long tuserId) {
-        groupMemberRepository.deleteBy
+
+
+    public void deleteGroupMemberForKick(Long groupId, Long userId) {
+        groupMemberRepository.deleteByGroupIdandUserId(groupId,userId);
     }
 }

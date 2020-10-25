@@ -23,7 +23,7 @@ public class UserController {
 
     @ApiOperation(
             value = "유저 리스트",
-            httpMethod = "POST",
+            httpMethod = "GET",
             produces = "application/json",
             consumes = "application/json",
             protocols = "http",

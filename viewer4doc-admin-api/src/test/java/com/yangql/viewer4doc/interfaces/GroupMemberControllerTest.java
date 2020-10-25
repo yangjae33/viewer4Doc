@@ -47,7 +47,6 @@ class GroupMemberControllerTest {
     }
     @Test
     public void deleteMember(){
-        Long tuserId = 1L;
-        groupMemberService.deleteGroupMember(tuserId);
+
     }
 }
