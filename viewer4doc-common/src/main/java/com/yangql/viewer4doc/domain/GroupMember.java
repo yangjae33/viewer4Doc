@@ -23,6 +23,9 @@ public class GroupMember {
     private Long userId;
 
     @Setter
+    private String userName;
+
+    @Setter
     private Long active;
 
     @Setter
