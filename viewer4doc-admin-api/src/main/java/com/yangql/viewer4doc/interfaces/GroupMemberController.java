@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.GroupMemberService;
 import com.yangql.viewer4doc.application.GroupService;
+import com.yangql.viewer4doc.application.UserService;
 import com.yangql.viewer4doc.domain.GroupMember;
 import com.yangql.viewer4doc.domain.GroupMemberReq;
 import com.yangql.viewer4doc.domain.GroupReq;
@@ -29,6 +30,8 @@ public class GroupMemberController {
     @Autowired
     private GroupMemberService groupMemberService;
 
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(
             value = "그룹 멤버 추가 ",
@@ -56,10 +59,12 @@ public class GroupMemberController {
         Long userId = claims.get("userId",Long.class);
         List<GroupMember> groupMembers = new ArrayList<>();
         for(Long i : targetId){
+            String userName = userService.getUserById(i).getName();
             GroupMember gm = GroupMember.builder()
                     .active(0L)
                     .level(1L)
                     .userId(i)
+                    .userName(userName)
                     .groupId(groupId)
                     .build();
             groupMembers.add(gm);
@@ -92,10 +97,16 @@ public class GroupMemberController {
     ) throws URISyntaxException {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
+        //TODO : User 상속해서 GroupMember 만들 것
+        String userName = userService.getUserById(userId).getName();
+        if(userName == null){
+            return ResponseEntity.badRequest().body("{}");
+        }
         GroupMember groupMember = GroupMember.builder()
                 .groupId(groupId)
                 .level(1L)
                 .userId(userId)
+                .userName(userName)
                 .active(1L)
                 .build();
         groupMemberService.addGroupMember(groupId,groupMember);
