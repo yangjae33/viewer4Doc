@@ -2,7 +2,6 @@ package com.yangql.viewer4doc.application;
 
 import com.yangql.viewer4doc.domain.GroupMember;
 import com.yangql.viewer4doc.domain.GroupMemberRepository;
-import com.yangql.viewer4doc.domain.UserInfo;
 import com.yangql.viewer4doc.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,5 @@ public class GroupMemberService {
 
     public void deleteGroupMembers(Long groupId) {
         groupMemberRepository.deleteAllByGroupId(groupId);
-    }
-
-
-
-    public void deleteGroupMemberForKick(Long groupId, Long userId) {
-        groupMemberRepository.deleteByGroupIdandUserId(groupId,userId);
     }
 }
