@@ -99,9 +99,9 @@ public class FileController {
     ){
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
-//        if(!fileService.checkAdmin(userId)){
-//            return ResponseEntity.badRequest().body("Unauthorized");
-//        }
+        if(!fileService.checkAdmin(userId)){
+            return ResponseEntity.badRequest().body("Unauthorized");
+        }
         fileService.deleteAllFiles(fileId,userId);
         //shareService.deleteAllShares(fileId);
 

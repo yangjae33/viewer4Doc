@@ -2,12 +2,14 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.UserService;
 import com.yangql.viewer4doc.domain.UserInfo;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -80,7 +82,16 @@ public class UserController {
     })
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/users/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+    public ResponseEntity<?> delete(
+            @PathVariable("id") Long id,
+            Authentication authentication
+    ){
+
+        Claims claims = (Claims)authentication.getPrincipal();
+        Long userId = claims.get("userId",Long.class);
+        if(!userService.checkAdmin(userId)){
+            return ResponseEntity.badRequest().body("Unauthorized");
+        }
         String s = userService.deactivateUser(id);
         return ResponseEntity.ok().body(s);
     }

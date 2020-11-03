@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
-
-    private static UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     PasswordEncoder passwordEncoder;
 
@@ -74,5 +76,12 @@ public class UserService {
     public UserInfo getUserById(Long userId){
         UserInfo userInfo = userRepository.findById(userId).orElse(null);
         return userInfo;
+    }
+
+    public boolean checkAdmin(Long userId) {
+        UserInfo userInfo = userRepository.findById(userId).orElse(null);
+        if(userInfo==null)
+            return false;
+        return userInfo.getLevel()==100;
     }
 }

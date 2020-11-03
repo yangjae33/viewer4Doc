@@ -6,6 +6,7 @@ import com.yangql.viewer4doc.application.UserService;
 import com.yangql.viewer4doc.domain.GroupMember;
 import com.yangql.viewer4doc.domain.GroupMemberReq;
 import com.yangql.viewer4doc.domain.GroupReq;
+import com.yangql.viewer4doc.domain.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -98,9 +99,14 @@ public class GroupMemberController {
         Claims claims = (Claims)authentication.getPrincipal();
         Long userId = claims.get("userId",Long.class);
         //TODO : User 상속해서 GroupMember 만들 것
-        String userName = userService.getUserById(userId).getName();
-        if(userName == null){
-            return ResponseEntity.badRequest().body("{}");
+        UserInfo newUser = userService.getUserById(userId);
+        String userName = "";
+        if(newUser == null){
+            userName = "";
+            //return ResponseEntity.badRequest().body("{}");
+        }
+        else {
+            userName = newUser.getName();
         }
         GroupMember groupMember = GroupMember.builder()
                 .groupId(groupId)

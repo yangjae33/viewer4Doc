@@ -1,6 +1,7 @@
 package com.yangql.viewer4doc.interfaces;
 
 import com.yangql.viewer4doc.application.EmailExistedException;
+import com.yangql.viewer4doc.application.MaxGroupCountException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,4 +16,12 @@ public class UserErrorAdvice {
     public String handleEmailNotExisted(){
         return "Existed Email";
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MaxGroupCountException.class)
+    public String handleMaxGroupCountException(){
+        return "{}";
+    }
+
 }

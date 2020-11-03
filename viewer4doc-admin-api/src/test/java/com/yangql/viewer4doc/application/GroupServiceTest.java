@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 class GroupServiceTest {
     private GroupService groupService;
     private ShareService shareService;
-
+    private FileService fileService;
     @Mock
     private FileInfoRepository fileInfoRepository;
 
@@ -30,12 +30,14 @@ class GroupServiceTest {
     @Mock
     private ShareRepository shareRepository;
 
+
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         mockReturnRepository();
         shareService = new ShareService(shareRepository);
         groupService = new GroupService(groupRepository);
+        fileService = new FileService(fileInfoRepository);
     }
     private void mockReturnRepository() {
         List<FileInfo> fileInfos = new ArrayList<>();
