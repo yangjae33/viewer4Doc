@@ -16,4 +16,6 @@ public interface GroupRepository extends CrudRepository<GroupInfo,Long> {
     @Modifying
     @Query("DELETE FROM GroupInfo g where g.id = :id")
     void deleteAllById(@Param("id")Long id);
+
+    List<GroupInfo> findAllBymId(Long mId);
 }

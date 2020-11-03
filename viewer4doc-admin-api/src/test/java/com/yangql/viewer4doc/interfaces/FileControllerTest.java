@@ -73,7 +73,11 @@ class FileControllerTest {
     @Test
     public void delete() throws Exception {
         //admin token
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
+        given(fileService.checkAdmin(43L)).willReturn(true);
+//        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
+
+        //token userId : 43
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjQzLCJlbWFpbCI6InRlc3QyQGdtYWlsLmNvbSJ9.ST5gpUsBC72MLHavuDC6X-DH1_vOPLZsl94fcZMhrR0";
         given(fileService.deleteAllFiles(1L,100L)).willReturn("Deleted");
         mvc.perform(post("/admin/files/1")
         .header("Authorization",":Bearer"+token))
@@ -82,10 +86,11 @@ class FileControllerTest {
     @Test
     public void deleteWithNotAdmin() throws Exception {
         //admin token
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjU0LCJlbWFpbCI6ImFkbWluIn0.FjZiIwpHdO27d2UduS6EQ3CssmEbNbSiCQ-EUNvPtKE";
+        given(fileService.checkAdmin(43L)).willReturn(false);
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjQzLCJlbWFpbCI6InRlc3QyQGdtYWlsLmNvbSJ9.ST5gpUsBC72MLHavuDC6X-DH1_vOPLZsl94fcZMhrR0";
         given(fileService.deleteAllFiles(1L,99L)).willReturn("Deleted");
         mvc.perform(post("/admin/files/1")
                 .header("Authorization",":Bearer"+token))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 }

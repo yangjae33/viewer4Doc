@@ -13,7 +13,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    private static UserRepository userRepository;
+    private UserRepository userRepository;
 
     PasswordEncoder passwordEncoder;
 

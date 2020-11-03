@@ -1,5 +1,6 @@
 package com.yangql.viewer4doc.interfaces;
 
+import com.yangql.viewer4doc.application.MaxFileSizeException;
 import com.yangql.viewer4doc.application.UploadFileNotExistException;
 import com.yangql.viewer4doc.application.UploadWithInvalidExtensionException;
 import org.springframework.http.HttpStatus;
@@ -23,4 +24,12 @@ public class UploadErrorAdvice {
     public String handleUploadWithInvalidExtension(){
         return "{}";
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MaxFileSizeException.class)
+    public String handleMaxFileSizeException(){
+        return "{}";
+    }
+
 }

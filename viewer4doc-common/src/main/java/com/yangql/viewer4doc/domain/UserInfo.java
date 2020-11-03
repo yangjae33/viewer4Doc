@@ -28,7 +28,6 @@ public class UserInfo {
 
     @Setter
     @NotNull
-    @JsonIgnore
     private Long level;
 
     @JsonIgnore
@@ -43,4 +42,9 @@ public class UserInfo {
     public boolean isCorp(){
         return level>=100L;
     }
+    @JsonIgnore
+    public boolean isAdmin() {
+        return level == 100L;
+    }
+
 }
