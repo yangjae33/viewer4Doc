@@ -2,6 +2,7 @@ package com.yangql.viewer4doc.interfaces;
 
 import com.google.common.net.HttpHeaders;
 import com.yangql.viewer4doc.application.FileService;
+import com.yangql.viewer4doc.application.MaxFileSizeException;
 import com.yangql.viewer4doc.application.ShareService;
 import com.yangql.viewer4doc.domain.*;
 import io.jsonwebtoken.Claims;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 

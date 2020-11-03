@@ -76,6 +76,7 @@ public class FileService {
     }
 
     public FileInfo uploadFileToPDF(MultipartFile file,Long userId) throws IOException {
+        if(file.getSize() > 10485760 ) { throw new MaxFileSizeException(); }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         fileName = fileName.replaceAll(" ","_");
@@ -83,6 +84,7 @@ public class FileService {
         String ext = fileName.substring(pos+1);
         String pureFileName = fileName.substring(0,pos);
         String newFilename = fileName.substring(0,pos)+".pdf";
+
 
         if(
                 !(ext.equals("docx") || ext.equals("pdf") || ext.equals("xlsx") ||
@@ -209,6 +211,7 @@ public class FileService {
         }
     }
     public GroupFile uploadGroupFileToPDF(MultipartFile file,Long userId,Long groupId) throws IOException {
+        if(file.getSize() > 10485760 ) { throw new MaxFileSizeException(); }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         fileName = fileName.replaceAll(" ","_");
