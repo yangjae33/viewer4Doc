@@ -208,7 +208,7 @@ public class FileService {
             return fileInfoRepository.save(newFile);
         }
     }
-    public FileInfo uploadGroupFileToPDF(MultipartFile file,Long userId,Long groupId) throws IOException {
+    public GroupFile uploadGroupFileToPDF(MultipartFile file,Long userId,Long groupId) throws IOException {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         fileName = fileName.replaceAll(" ","_");
@@ -285,7 +285,7 @@ public class FileService {
                     .fileSize(Math.round(file.getSize() * 0.0009765625))//KB
                     .level(1L)
                     .build();
-
+            fileInfoRepository.save(newFile);
             GroupFile groupFile = GroupFile.builder()
                     .fileId(newFile.getId())
                     .groupId(groupId)
@@ -296,8 +296,8 @@ public class FileService {
                     .userId(newFile.getPubId())
                     .level(0L)
                     .build();
-            groupFileRepository.save(groupFile);
-            return fileInfoRepository.save(newFile);
+
+            return groupFileRepository.save(groupFile);
         }
         else {
             Path path = Paths.get(UPLOAD_DIR);
@@ -335,7 +335,7 @@ public class FileService {
                     .fileSize(Math.round(file.getSize() * 0.0009765625))//KB
                     .level(1L)
                     .build();
-
+            fileInfoRepository.save(newFile);
             Share share = Share.builder()
                     .fileId(newFile.getId())
                     .userId(newFile.getPubId())
@@ -346,8 +346,7 @@ public class FileService {
                     .fileId(newFile.getId())
                     .groupId(groupId)
                     .build();
-            groupFileRepository.save(groupFile);
-            return fileInfoRepository.save(newFile);
+            return groupFileRepository.save(groupFile);
         }
     }
     public Resource loadAsResource(Long fileId) throws FileNotFoundException {

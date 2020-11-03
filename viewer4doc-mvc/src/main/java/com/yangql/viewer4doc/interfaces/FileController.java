@@ -256,12 +256,12 @@ public class FileController {
 
         String url = "/api/upload-to-pdf";
 
-        FileInfo newFile = fileService.uploadGroupFileToPDF(file,userId,groupId);
+        GroupFile newFile = fileService.uploadGroupFileToPDF(file,userId,groupId);
         GroupFile gf = GroupFile.builder()
                 .fileId(newFile.getId())
                 .groupId(groupId)
                 .build();
-        fileService.addGroupShare(gf);
+        //fileService.addGroupShare(gf);
         return ResponseEntity.created(new URI(url)).body(newFile);
     }
 
